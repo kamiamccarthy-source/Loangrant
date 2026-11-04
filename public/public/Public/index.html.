@@ -1,0 +1,318 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#123b82">
+  <title>LoanGrant | Simple Loan Applications</title>
+  <meta name="description" content="LoanGrant - A simple and transparent loan application platform.">
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: Arial, sans-serif;
+      color: #17243b;
+      background: #f5f8ff;
+      line-height: 1.6;
+    }
+
+    header {
+      background: white;
+      padding: 17px 6%;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      box-shadow: 0 2px 12px #0000000b;
+    }
+
+    .logo {
+      font-size: 25px;
+      font-weight: 800;
+      color: #174a9c;
+    }
+
+    .logo span {
+      color: #27a6ed;
+    }
+
+    .nav-link {
+      color: #174a9c;
+      text-decoration: none;
+      font-weight: bold;
+      font-size: 14px;
+    }
+
+    .hero {
+      padding: 75px 7% 65px;
+      background: linear-gradient(125deg, #123b82, #1769bd);
+      color: white;
+    }
+
+    .hero-content {
+      max-width: 700px;
+      margin: auto;
+    }
+
+    .tag {
+      display: inline-block;
+      background: #ffffff20;
+      border: 1px solid #ffffff40;
+      padding: 7px 14px;
+      border-radius: 30px;
+      font-size: 12px;
+      margin-bottom: 20px;
+    }
+
+    h1 {
+      font-size: clamp(35px, 7vw, 54px);
+      line-height: 1.15;
+      margin-bottom: 20px;
+    }
+
+    .hero p {
+      font-size: 16px;
+      color: #e4efff;
+      max-width: 550px;
+      margin-bottom: 28px;
+    }
+
+    .primary-btn {
+      display: inline-block;
+      background: white;
+      color: #174a9c;
+      padding: 14px 25px;
+      border-radius: 9px;
+      text-decoration: none;
+      font-weight: bold;
+    }
+
+    .section {
+      padding: 55px 7%;
+      max-width: 1050px;
+      margin: auto;
+    }
+
+    .section-title {
+      text-align: center;
+      font-size: 29px;
+      margin-bottom: 12px;
+      color: #173d79;
+    }
+
+    .section-intro {
+      text-align: center;
+      color: #64748b;
+      margin-bottom: 35px;
+    }
+
+    .features {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 18px;
+    }
+
+    .feature {
+      background: white;
+      padding: 25px;
+      border-radius: 14px;
+      border: 1px solid #e7edf7;
+      box-shadow: 0 5px 20px #173d790a;
+    }
+
+    .feature-icon {
+      font-size: 30px;
+      margin-bottom: 12px;
+    }
+
+    .feature h3 {
+      color: #174a9c;
+      margin-bottom: 8px;
+    }
+
+    .feature p {
+      font-size: 14px;
+      color: #64748b;
+    }
+
+    .application {
+      background: white;
+      padding: 35px 25px;
+      border-radius: 16px;
+      border: 1px solid #e5eaf3;
+      text-align: center;
+      max-width: 650px;
+      margin: auto;
+    }
+
+    .application p {
+      color: #64748b;
+      margin: 12px 0 20px;
+    }
+
+    .status {
+      display: inline-block;
+      padding: 7px 14px;
+      border-radius: 20px;
+      background: #fff2d8;
+      color: #895b08;
+      font-size: 12px;
+      font-weight: bold;
+    }
+
+    .steps {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 20px;
+      text-align: center;
+    }
+
+    .step {
+      padding: 15px;
+    }
+
+    .step-number {
+      background: #e5efff;
+      color: #174a9c;
+      display: inline-flex;
+      width: 43px;
+      height: 43px;
+      border-radius: 50%;
+      align-items: center;
+      justify-content: center;
+      font-weight: bold;
+      margin-bottom: 12px;
+    }
+
+    footer {
+      background: #102c5d;
+      color: white;
+      text-align: center;
+      padding: 30px 15px;
+      font-size: 13px;
+    }
+
+    footer p {
+      color: #d0ddf1;
+      margin-top: 7px;
+    }
+
+    @media(max-width: 500px) {
+      .hero {
+        padding: 55px 7%;
+      }
+
+      .section {
+        padding: 42px 6%;
+      }
+
+      header {
+        padding: 15px 5%;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+<header>
+  <div class="logo">Loan<span>Grant</span></div>
+  <a class="nav-link" href="#about">About us</a>
+</header>
+
+<section class="hero">
+  <div class="hero-content">
+    <span class="tag">WELCOME TO LOANGRANT</span>
+    <h1>Financial support starts with a simple application.</h1>
+    <p>
+      Explore our loan application service and find out how
+      to submit a request for financial assistance.
+    </p>
+    <a href="#apply" class="primary-btn">Explore Loan Applications</a>
+  </div>
+</section>
+
+<section class="section" id="about">
+  <h2 class="section-title">Why LoanGrant?</h2>
+  <p class="section-intro">
+    A straightforward approach to loan applications.
+  </p>
+
+  <div class="features">
+    <div class="feature">
+      <div class="feature-icon">📱</div>
+      <h3>Easy Registration</h3>
+      <p>Designed for convenient registration using your mobile phone.</p>
+    </div>
+
+    <div class="feature">
+      <div class="feature-icon">🔐</div>
+      <h3>Phone Verification</h3>
+      <p>Phone ownership verification will help protect customer accounts.</p>
+    </div>
+
+    <div class="feature">
+      <div class="feature-icon">📋</div>
+      <h3>Loan Applications</h3>
+      <p>Submit loan requests and follow their review status.</p>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <h2 class="section-title">How It Works</h2>
+  <p class="section-intro">Our planned application process.</p>
+
+  <div class="steps">
+    <div class="step">
+      <div class="step-number">1</div>
+      <h3>Register</h3>
+      <p>Create your customer account.</p>
+    </div>
+
+    <div class="step">
+      <div class="step-number">2</div>
+      <h3>Verify</h3>
+      <p>Confirm ownership of your phone number.</p>
+    </div>
+
+    <div class="step">
+      <div class="step-number">3</div>
+      <h3>Apply</h3>
+      <p>Submit your loan application.</p>
+    </div>
+
+    <div class="step">
+      <div class="step-number">4</div>
+      <h3>Review</h3>
+      <p>Receive an update after application review.</p>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="apply">
+  <div class="application">
+    <span class="status">APPLICATION PORTAL IN DEVELOPMENT</span>
+    <h2 style="margin-top:18px;color:#173d79">
+      Loan applications coming soon
+    </h2>
+    <p>
+      We are preparing our secure customer registration,
+      phone verification and loan application system.
+      Applications are not yet being accepted.
+    </p>
+  </div>
+</section>
+
+<footer>
+  <h2>LoanGrant</h2>
+  <p>Simple. Secure. Transparent.</p>
+  <p>© 2026 LoanGrant. All rights reserved.</p>
+</footer>
+
+</body>
+</html>
