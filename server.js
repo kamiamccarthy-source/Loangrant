@@ -237,10 +237,12 @@ function requireAuth(req, res, next) {
     );
 
     if (
-      !Number.isSafeInteger(payload.id) ||
-      payload.id < 1 ||
-      payload.exp < Math.floor(Date.now() / 1000)
-    ) {
+  typeof payload.id !== "string" ||
+  !/^[1-9]\d*$/.test(payload.id) ||
+  !Number.isSafeInteger(payload.exp) ||
+  payload.exp <= Math.floor(Date.now() / 1000)
+)
+     {
       return res.status(401).json({
         success: false,
         message: "Your session has expired."
