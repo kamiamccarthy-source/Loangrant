@@ -867,7 +867,7 @@ app.get("/", (req, res) => {
   res.sendFile(require("path").join(__dirname, "public", "index.html"));
 });
 
-app.use(express.static("public"));
+app.use(express.static(require("path").join(__dirname, "public")));
 
 async function startServer() {
   try {
