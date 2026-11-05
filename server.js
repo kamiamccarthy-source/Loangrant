@@ -202,7 +202,87 @@ function createToken(customerId) {
 
   return payload + "." + signature;
 }
+function createAdminToken() {
+  const secret = process.env.JWT_SECRET;
 
+  if (!secret || secret.length < 32) {
+    throw new Error("JWT_SECRET is not configured.");
+  }
+
+  const payload = Buffer.from(JSON.stringify({
+    role: "admin",
+    exp: Math.floor(Date.now() / 1000) + 60 * 60 * 8
+  })).toString("base64url");
+
+  const signature = crypto
+    .createHmac("sha256", secret)
+    .update(payload)
+    .digest("base64url");
+
+  return payload + "." + signature;
+}
+
+function requireAdmin(req, res, next) {
+  try {
+    const header = req.headers.authorization || "";
+    const token = header.startsWith("Bearer ")
+      ? header.slice(7)
+      : "";
+
+    const parts = token.split(".");
+    const secret = process.env.JWT_SECRET;
+
+    if (
+      parts.length !== 2 ||
+      !secret ||
+      secret.length < 32
+    ) {
+      return res.status(401).json({
+        success: false,
+        message: "Administrator login required."
+      });
+    }
+
+    const expected = crypto
+      .createHmac("sha256", secret)
+      .update(parts[0])
+      .digest();
+
+    const received = Buffer.from(parts[1], "base64url");
+
+    if (
+      received.length !== expected.length ||
+      !crypto.timingSafeEqual(received, expected)
+    ) {
+      return res.status(401).json({
+        success: false,
+        message: "Invalid administrator session."
+      });
+    }
+
+    const payload = JSON.parse(
+      Buffer.from(parts[0], "base64url").toString()
+    );
+
+    if (
+      payload.role !== "admin" ||
+      !Number.isSafeInteger(payload.exp) ||
+      payload.exp <= Math.floor(Date.now() / 1000)
+    ) {
+      return res.status(403).json({
+        success: false,
+        message: "Administrator access denied."
+      });
+    }
+
+    next();
+  } catch (error) {
+    return res.status(401).json({
+      success: false,
+      message: "Invalid administrator session."
+    });
+  }
+}
 function requireAuth(req, res, next) {
   try {
     const header = req.headers.authorization || "";
@@ -271,7 +351,64 @@ function requireAuth(req, res, next) {
     });
   }
 }
+// ADMINISTRATOR LOGIN
 
+const adminLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000,
+  limit: 5,
+  standardHeaders: "draft-7",
+  legacyHeaders: false
+});
+
+function safeCompare(a, b) {
+  const first = Buffer.from(String(a));
+  const second = Buffer.from(String(b));
+
+  return first.length === second.length &&
+    crypto.timingSafeEqual(first, second);
+}
+
+app.post("/api/admin/login", adminLimiter, (req, res) => {
+  const username = process.env.ADMIN_USERNAME;
+  const password = process.env.ADMIN_PASSWORD;
+
+  if (
+    !username ||
+    !password ||
+    password.length < 16
+  ) {
+    return res.status(503).json({
+      success: false,
+      message: "Administrator credentials are not configured."
+    });
+  }
+
+  const suppliedUsername =
+    typeof req.body.username === "string"
+      ? req.body.username
+      : "";
+
+  const suppliedPassword =
+    typeof req.body.password === "string"
+      ? req.body.password
+      : "";
+
+  if (
+    !safeCompare(suppliedUsername, username) ||
+    !safeCompare(suppliedPassword, password)
+  ) {
+    return res.status(401).json({
+      success: false,
+      message: "Incorrect administrator credentials."
+    });
+  }
+
+  res.json({
+    success: true,
+    message: "Administrator login successful.",
+    token: createAdminToken()
+  });
+});
 // CUSTOMER REGISTRATION
 
 app.post("/api/auth/register", authLimiter, async (req, res) => {
@@ -593,7 +730,139 @@ app.get("/api/loans/my-applications", requireAuth, async (req, res) => {
     });
   }
 });
+// ADMINISTRATOR DASHBOARD APIs
 
+app.get("/api/admin/summary", requireAdmin, async (req, res) => {
+  try {
+    const result = await pool.query(`
+      SELECT
+        (SELECT COUNT(*) FROM customers) AS total_customers,
+        (SELECT COUNT(*) FROM loan_applications) AS total_applications,
+        (SELECT COUNT(*) FROM loan_applications
+          WHERE status = 'pending') AS pending_applications,
+        (SELECT COUNT(*) FROM loan_applications
+          WHERE status = 'approved') AS approved_applications,
+        (SELECT COUNT(*) FROM loan_applications
+          WHERE status = 'rejected') AS rejected_applications
+    `);
+
+    res.json({
+      success: true,
+      summary: result.rows[0]
+    });
+  } catch (error) {
+    console.error("Admin summary error:", error.message);
+    res.status(500).json({
+      success: false,
+      message: "Unable to load dashboard summary."
+    });
+  }
+});
+
+app.get("/api/admin/customers", requireAdmin, async (req, res) => {
+  try {
+    const result = await pool.query(`
+      SELECT id, full_name, email, phone,
+             phone_verified, created_at
+      FROM customers
+      ORDER BY created_at DESC
+      LIMIT 100
+    `);
+
+    res.json({
+      success: true,
+      customers: result.rows
+    });
+  } catch (error) {
+    console.error("Admin customers error:", error.message);
+    res.status(500).json({
+      success: false,
+      message: "Unable to retrieve customers."
+    });
+  }
+});
+
+app.get("/api/admin/applications", requireAdmin, async (req, res) => {
+  try {
+    const result = await pool.query(`
+      SELECT
+        l.id,
+        l.customer_id,
+        c.full_name,
+        c.phone,
+        l.amount,
+        l.purpose,
+        l.monthly_income,
+        l.repayment_months,
+        l.status,
+        l.created_at
+      FROM loan_applications l
+      JOIN customers c ON c.id = l.customer_id
+      ORDER BY l.created_at DESC
+      LIMIT 100
+    `);
+
+    res.json({
+      success: true,
+      applications: result.rows
+    });
+  } catch (error) {
+    console.error("Admin applications error:", error.message);
+    res.status(500).json({
+      success: false,
+      message: "Unable to retrieve applications."
+    });
+  }
+});
+
+app.patch(
+  "/api/admin/applications/:id/status",
+  requireAdmin,
+  async (req, res) => {
+    try {
+      const id = req.params.id;
+      const status = req.body.status;
+
+      if (
+        !/^[1-9]\d*$/.test(id) ||
+        !["approved", "rejected"].includes(status)
+      ) {
+        return res.status(400).json({
+          success: false,
+          message: "Invalid application ID or status."
+        });
+      }
+
+      const result = await pool.query(
+        `UPDATE loan_applications
+         SET status = $1
+         WHERE id = $2
+         RETURNING id, status`,
+        [status, id]
+      );
+
+      if (result.rows.length === 0) {
+        return res.status(404).json({
+          success: false,
+          message: "Application not found."
+        });
+      }
+
+      res.json({
+        success: true,
+        message: "Application status updated.",
+        application: result.rows[0],
+        funds_disbursed: false
+      });
+    } catch (error) {
+      console.error("Admin status update error:", error.message);
+      res.status(500).json({
+        success: false,
+        message: "Unable to update application status."
+      });
+    }
+  }
+);
 app.get("/", (req, res) => {
   res.sendFile(require("path").join(__dirname, "public", "index.html"));
 });
