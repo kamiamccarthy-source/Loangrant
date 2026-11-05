@@ -447,6 +447,138 @@ app.get("/api/auth/me", requireAuth, async (req, res) => {
   }
 });
 
+// SUBMIT LOAN APPLICATION
+
+app.post("/api/loans/apply", requireAuth, authLimiter, async (req, res) => {
+  try {
+    const {
+      amount,
+      purpose,
+      monthly_income,
+      repayment_months
+    } = req.body;
+
+    const loanAmount = Number(amount);
+    const income = Number(monthly_income);
+    const months = Number(repayment_months);
+
+    if (
+      !Number.isFinite(loanAmount) ||
+      loanAmount < 1000 ||
+      loanAmount > 5000000
+    ) {
+      return res.status(400).json({
+        success: false,
+        message: "Loan amount must be between ₦1,000 and ₦5,000,000."
+      });
+    }
+
+    if (
+      typeof purpose !== "string" ||
+      purpose.trim().length < 10 ||
+      purpose.trim().length > 1000
+    ) {
+      return res.status(400).json({
+        success: false,
+        message: "Please explain your loan purpose (10–1000 characters)."
+      });
+    }
+
+    if (
+      !Number.isFinite(income) ||
+      income <= 0 ||
+      income > 100000000
+    ) {
+      return res.status(400).json({
+        success: false,
+        message: "Enter a valid monthly income."
+      });
+    }
+
+    if (
+      !Number.isInteger(months) ||
+      months < 1 ||
+      months > 36
+    ) {
+      return res.status(400).json({
+        success: false,
+        message: "Repayment period must be between 1 and 36 months."
+      });
+    }
+
+    const existing = await pool.query(
+      `SELECT id FROM loan_applications
+       WHERE customer_id = $1 AND status = 'pending'
+       LIMIT 1`,
+      [req.customerId]
+    );
+
+    if (existing.rows.length > 0) {
+      return res.status(409).json({
+        success: false,
+        message: "You already have an application awaiting review."
+      });
+    }
+
+    const result = await pool.query(
+      `INSERT INTO loan_applications
+       (customer_id, amount, purpose, monthly_income, repayment_months)
+       VALUES ($1, $2, $3, $4, $5)
+       RETURNING id, amount, purpose, monthly_income,
+                 repayment_months, status, created_at`,
+      [
+        req.customerId,
+        loanAmount,
+        purpose.trim(),
+        income,
+        months
+      ]
+    );
+
+    res.status(201).json({
+      success: true,
+      message: "Your loan application has been submitted for review.",
+      application: result.rows[0]
+    });
+
+  } catch (error) {
+    console.error("Loan application error:", error.message);
+
+    res.status(500).json({
+      success: false,
+      message: "Unable to submit your application."
+    });
+  }
+});
+
+// VIEW CUSTOMER LOAN APPLICATIONS
+
+app.get("/api/loans/my-applications", requireAuth, async (req, res) => {
+  try {
+    const result = await pool.query(
+      `SELECT id, amount, purpose, monthly_income,
+              repayment_months, status, created_at
+       FROM loan_applications
+       WHERE customer_id = $1
+       ORDER BY created_at DESC`,
+      [req.customerId]
+    );
+
+    res.json({
+      success: true,
+      applications: result.rows
+    });
+
+  } catch (error) {
+    console.error("Applications error:", error.message);
+
+    res.status(500).json({
+      success: false,
+      message: "Unable to retrieve your applications."
+    });
+  }
+});
+
 app.get("/", (req, res) => {
   res.sendFile(require("path").join(__dirname, "public", "index.html"));
 });
