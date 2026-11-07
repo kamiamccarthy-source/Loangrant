@@ -281,12 +281,23 @@
   }
 
   function showAuth(mode) {
-    document.getElementById("registerForm").classList.toggle("hidden", mode !== "register");
-    document.getElementById("loginForm").classList.toggle("hidden", mode !== "login");
-    document.getElementById("registerTab").classList.toggle("active", mode === "register");
-    document.getElementById("loginTab").classList.toggle("active", mode === "login");
-  }
+  const registerForm = document.getElementById("registerForm");
+  const loginForm = document.getElementById("loginForm");
+  const registerTab = document.getElementById("registerTab");
+  const loginTab = document.getElementById("loginTab");
 
+  if (mode === "login") {
+    registerForm.classList.add("hidden");
+    loginForm.classList.remove("hidden");
+    registerTab.classList.remove("active");
+    loginTab.classList.add("active");
+  } else {
+    loginForm.classList.add("hidden");
+    registerForm.classList.remove("hidden");
+    loginTab.classList.remove("active");
+    registerTab.classList.add("active");
+  }
+}
   function saveSession(data) {
     sessionStorage.setItem("loangrant_token", data.token);
     customer = data.customer;
