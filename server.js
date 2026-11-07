@@ -353,8 +353,10 @@ function requireAdmin(req, res, next) {
       Buffer.from(parts[0], "base64url").toString()
     );
 
-    if (
+        if (
       payload.role !== "admin" ||
+      typeof payload.username !== "string" ||
+      !payload.username ||
       !Number.isSafeInteger(payload.exp) ||
       payload.exp <= Math.floor(Date.now() / 1000)
     ) {
@@ -363,7 +365,7 @@ function requireAdmin(req, res, next) {
         message: "Administrator access denied."
       });
     }
-
+    req.adminUsername = payload.username;
     next();
   } catch (error) {
     return res.status(401).json({
