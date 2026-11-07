@@ -289,7 +289,8 @@ function createToken(customerId) {
 
   return payload + "." + signature;
 }
-function createAdminToken() {
+
+function createAdminToken(username) {
   const secret = process.env.JWT_SECRET;
 
   if (!secret || secret.length < 32) {
@@ -298,6 +299,7 @@ function createAdminToken() {
 
   const payload = Buffer.from(JSON.stringify({
     role: "admin",
+    username,
     exp: Math.floor(Date.now() / 1000) + 60 * 60 * 8
   })).toString("base64url");
 
