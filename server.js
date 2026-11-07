@@ -123,7 +123,7 @@ async function initializeDatabase() {
     )
   `);
 
-  await pool.query(`
+    await pool.query(`
     CREATE TABLE IF NOT EXISTS loan_applications (
       id BIGSERIAL PRIMARY KEY,
       customer_id BIGINT NOT NULL REFERENCES customers(id),
@@ -133,6 +133,33 @@ async function initializeDatabase() {
       repayment_months INTEGER NOT NULL,
       status VARCHAR(20) DEFAULT 'pending',
       created_at TIMESTAMPTZ DEFAULT NOW()
+    )
+  `);
+
+  await pool.query(`
+    CREATE TABLE IF NOT EXISTS customer_kyc (
+      id BIGSERIAL PRIMARY KEY,
+      customer_id BIGINT NOT NULL REFERENCES customers(id),
+      loan_application_id BIGINT REFERENCES loan_applications(id),
+      bvn_encrypted TEXT NOT NULL,
+      bank_name_encrypted TEXT NOT NULL,
+      account_number_encrypted TEXT NOT NULL,
+      account_name_encrypted TEXT NOT NULL,
+      consent_given BOOLEAN NOT NULL DEFAULT FALSE,
+      created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+      updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+      UNIQUE (loan_application_id)
+    )
+  `);
+
+  await pool.query(`
+    CREATE TABLE IF NOT EXISTS admin_kyc_access_logs (
+      id BIGSERIAL PRIMARY KEY,
+      admin_username VARCHAR(120) NOT NULL,
+      customer_kyc_id BIGINT NOT NULL
+        REFERENCES customer_kyc(id),
+      action VARCHAR(30) NOT NULL,
+      accessed_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
     )
   `);
 }
