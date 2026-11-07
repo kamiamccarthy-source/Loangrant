@@ -886,4 +886,3 @@ initializeDatabase()
     );
   });
 
-startServer();
