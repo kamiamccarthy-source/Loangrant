@@ -163,21 +163,7 @@ async function initializeDatabase() {
     )
   `);
 }
-  await pool.query(`
-    CREATE TABLE IF NOT EXISTS customer_kyc (
-      id BIGSERIAL PRIMARY KEY,
-      customer_id BIGINT NOT NULL REFERENCES customers(id),
-      loan_application_id BIGINT REFERENCES loan_applications(id),
-      bvn_encrypted TEXT NOT NULL,
-      bank_name_encrypted TEXT NOT NULL,
-      account_number_encrypted TEXT NOT NULL,
-      account_name_encrypted TEXT NOT NULL,
-      consent_given BOOLEAN NOT NULL DEFAULT FALSE,
-      created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
-      updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
-      UNIQUE (loan_application_id)
-    )
-  `);
+  
 
   await pool.query(`
     CREATE TABLE IF NOT EXISTS admin_kyc_access_logs (
@@ -189,6 +175,7 @@ async function initializeDatabase() {
       accessed_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
     )
   `);
+
 app.get("/api/health", (req, res) => {
   res.json({
     success: true,
