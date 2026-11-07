@@ -450,7 +450,12 @@ const adminLimiter = rateLimit({
   standardHeaders: "draft-7",
   legacyHeaders: false
 });
-
+const kycAccessLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000,
+  limit: 10,
+  standardHeaders: "draft-7",
+  legacyHeaders: false
+});
 function safeCompare(a, b) {
   const first = Buffer.from(String(a));
   const second = Buffer.from(String(b));
