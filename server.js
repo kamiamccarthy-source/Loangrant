@@ -164,6 +164,7 @@ async function initializeDatabase() {
       accessed_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
     )
   `);
+}
 
 app.get("/api/health", (req, res) => {
   res.json({
