@@ -568,7 +568,11 @@ async function updateStatus(id, status) {
 }
 
 function logout() {
+  clearKycDetails();
   sessionStorage.removeItem("loangrant_admin_token");
+  adminToken = null;
+  showLogin();
+}
   adminToken = null;
   showLogin();
 }
