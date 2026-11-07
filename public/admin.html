@@ -179,27 +179,50 @@
             <tr><td colspan="6">Loading applications...</td></tr>
           </tbody>
         </table>
-      </div>
+       </div>
     </div>
 
+    <!-- CUSTOMER KYC RECORDS -->
     <div class="card">
-      <h2>Registered Customers</h2>
+      <h2>Customer KYC Records</h2>
+      <p class="muted">
+        Sensitive information is hidden until an administrator requests access.
+        Each viewing request is recorded.
+      </p>
+
       <div class="table-wrap">
         <table>
           <thead>
             <tr>
-              <th>ID</th>
-              <th>Full name</th>
-              <th>Phone</th>
-              <th>Email</th>
-              <th>Phone verified</th>
-              <th>Registered</th>
+              <th>KYC ID</th>
+              <th>Customer</th>
+              <th>Application ID</th>
+              <th>Application status</th>
+              <th>Submitted</th>
+              <th>Action</th>
             </tr>
           </thead>
-          <tbody id="customersBody">
-            <tr><td colspan="6">Loading customers...</td></tr>
+          <tbody id="kycBody">
+            <tr><td colspan="6">Loading KYC records...</td></tr>
           </tbody>
         </table>
+      </div>
+
+      <div id="kycDetails" class="card hidden">
+        <h2>Protected KYC Information</h2>
+        <p class="muted">
+          Access these details only when necessary for legitimate loan processing.
+        </p>
+
+        <p>Customer: <span id="kycFullName"></span></p>
+        <p>BVN: <span id="kycBvn"></span></p>
+        <p>Bank: <span id="kycBank"></span></p>
+        <p>Account number: <span id="kycAccountNumber"></span></p>
+        <p>Account name: <span id="kycAccountName"></span></p>
+
+        <button class="logout" onclick="clearKycDetails()">
+          Hide KYC Details
+        </button>
       </div>
     </div>
   </section>
