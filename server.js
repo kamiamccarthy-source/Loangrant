@@ -29,6 +29,7 @@ app.use(express.urlencoded({ extended: false }));
 
 const pool = new Pool({
   connectionString: process.env.DATABASE_URL,
+    connectionTimeoutMillis: 10000,
   ssl: process.env.PGSSL === "true"
     ? { rejectUnauthorized: false }
     : undefined
@@ -870,16 +871,19 @@ app.get("/", (req, res) => {
 
 app.use(express.static(require("path").join(__dirname, "public")));
 
-async function startServer() {
-  try {
-    await initializeDatabase();
-    app.listen(PORT, () => {
-      console.log(`LoanGrant running on port ${PORT}`);
-    });
-  } catch (error) {
-    console.error("Startup failed:", error.message);
-    process.exit(1);
-  }
-}
+const server = app.listen(PORT, "0.0.0.0", () => {
+  console.log(`LoanGrant listening on port ${PORT}`);
+});
+
+initializeDatabase()
+  .then(() => {
+    console.log("LoanGrant database initialized successfully.");
+  })
+  .catch((error) => {
+    console.error(
+      "LoanGrant database initialization failed:",
+      error.message
+    );
+  });
 
 startServer();
