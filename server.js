@@ -502,7 +502,7 @@ app.post("/api/admin/login", adminLimiter, (req, res) => {
   res.json({
     success: true,
     message: "Administrator login successful.",
-    token: token: createAdminToken(username)
+   token: createAdminToken(username)
   });
 });
 // CUSTOMER REGISTRATION
