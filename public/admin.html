@@ -444,6 +444,153 @@ function clearKycDetails() {
     message.textContent = error.message;
   }
 }
+
+<script>
+const API = "/api";
+let adminToken = sessionStorage.getItem("loangrant_admin_token");
+
+function escapeHTML(value) {
+  return String(value ?? "").replace(/[&<>"']/g, char => ({
+    "&": "&amp;",
+    "<": "&lt;",
+    ">": "&gt;",
+    '"': "&quot;",
+    "'": "&#39;"
+  })[char]);
+}
+
+function formatMoney(value) {
+  const number = Number(value);
+  return Number.isFinite(number)
+    ? "₦" + number.toLocaleString("en-NG", {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2
+      })
+    : "—";
+}
+
+function formatDate(value) {
+  if (!value) return "—";
+  const date = new Date(value);
+  return Number.isNaN(date.getTime())
+    ? "—"
+    : date.toLocaleString("en-NG");
+}
+
+function showDashboard() {
+  document.getElementById("loginSection").classList.add("hidden");
+  document.getElementById("dashboard").classList.remove("hidden");
+}
+
+function showLogin() {
+  document.getElementById("dashboard").classList.add("hidden");
+  document.getElementById("loginSection").classList.remove("hidden");
+}
+
+async function apiRequest(path, options = {}) {
+  const response = await fetch(API + path, {
+    ...options,
+    headers: {
+      "Content-Type": "application/json",
+      "Authorization": "Bearer " + adminToken,
+      ...(options.headers || {})
+    }
+  });
+
+  const data = await response.json().catch(() => ({}));
+
+  if (response.status === 401 || response.status === 403) {
+    logout();
+    throw new Error("Your administrator session has expired. Please sign in again.");
+  }
+
+  if (!response.ok || data.success === false) {
+    throw new Error(data.message || "Request failed.");
+  }
+
+  return data;
+}
+
+document.getElementById("loginForm").addEventListener("submit", async event => {
+  event.preventDefault();
+
+  const button = document.getElementById("loginButton");
+  const message = document.getElementById("loginMessage");
+
+  button.disabled = true;
+  message.className = "message";
+  message.textContent = "Signing in...";
+
+  try {
+    const response = await fetch(API + "/admin/login", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        username: document.getElementById("username").value,
+        password: document.getElementById("password").value
+      })
+    });
+
+    const data = await response.json();
+
+    if (!response.ok || !data.success || !data.token) {
+      throw new Error(data.message || "Login failed.");
+    }
+
+    adminToken = data.token;
+    sessionStorage.setItem("loangrant_admin_token", adminToken);
+
+    document.getElementById("password").value = "";
+    showDashboard();
+    await loadDashboard();
+
+  } catch (error) {
+    message.className = "message error";
+    message.textContent = error.message;
+  } finally {
+    button.disabled = false;
+  }
+});
+
+async function loadDashboard() {
+  const message = document.getElementById("dashboardMessage");
+  message.className = "message";
+  message.textContent = "Refreshing dashboard...";
+
+  try {
+    const [summaryData, customerData, applicationData] =
+      await Promise.all([
+        apiRequest("/admin/summary"),
+        apiRequest("/admin/customers"),
+        apiRequest("/admin/applications")
+      ]);
+
+    const summary = summaryData.summary || {};
+
+    document.getElementById("totalCustomers").textContent =
+      summary.total_customers ?? 0;
+    document.getElementById("totalApplications").textContent =
+      summary.total_applications ?? 0;
+    document.getElementById("pendingApplications").textContent =
+      summary.pending_applications ?? 0;
+    document.getElementById("approvedApplications").textContent =
+      summary.approved_applications ?? 0;
+    document.getElementById("rejectedApplications").textContent =
+      summary.rejected_applications ?? 0;
+
+    renderCustomers(customerData.customers || []);
+    renderApplications(applicationData.applications || []);
+    await loadKycRecords();
+
+    message.className = "message success";
+    message.textContent = "Dashboard updated successfully.";
+
+  } catch (error) {
+    message.className = "message error";
+    message.textContent = error.message;
+  }
+}
+
 async function loadKycRecords() {
   const body = document.getElementById("kycBody");
 
@@ -479,6 +626,54 @@ async function loadKycRecords() {
     `;
   }
 }
+
+async function viewKyc(id) {
+  clearKycDetails();
+
+  if (!confirm(
+    "You are about to access sensitive customer identity and bank information. Continue only if required for legitimate loan processing."
+  )) {
+    return;
+  }
+
+  try {
+    const data = await apiRequest(
+      "/admin/kyc/" + encodeURIComponent(id)
+    );
+
+    const kyc = data.kyc;
+
+    document.getElementById("kycFullName").textContent = kyc.full_name || "—";
+    document.getElementById("kycBvn").textContent = kyc.bvn || "—";
+    document.getElementById("kycBank").textContent = kyc.bank_name || "—";
+    document.getElementById("kycAccountNumber").textContent = kyc.account_number || "—";
+    document.getElementById("kycAccountName").textContent = kyc.account_name || "—";
+
+    document.getElementById("kycDetails").classList.remove("hidden");
+    document.getElementById("kycDetails").scrollIntoView({
+      behavior: "smooth",
+      block: "start"
+    });
+
+  } catch (error) {
+    alert(error.message);
+  }
+}
+
+function clearKycDetails() {
+  [
+    "kycFullName",
+    "kycBvn",
+    "kycBank",
+    "kycAccountNumber",
+    "kycAccountName"
+  ].forEach(id => {
+    document.getElementById(id).textContent = "";
+  });
+
+  document.getElementById("kycDetails").classList.add("hidden");
+}
+
 function renderCustomers(customers) {
   const body = document.getElementById("customersBody");
 
@@ -562,6 +757,7 @@ async function updateStatus(id, status) {
 
     alert("Application status updated. No funds were transferred.");
     await loadDashboard();
+
   } catch (error) {
     alert(error.message);
   }
@@ -573,14 +769,12 @@ function logout() {
   adminToken = null;
   showLogin();
 }
-  adminToken = null;
-  showLogin();
-}
 
 if (adminToken) {
   showDashboard();
   loadDashboard();
 }
 </script>
+
 </body>
 </html>
