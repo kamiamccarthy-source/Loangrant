@@ -962,6 +962,97 @@ app.get("/api/loans/my-applications", requireAuth, async (req, res) => {
     });
   }
 });
+
+// SECURE ADMINISTRATOR KYC ACCESS
+
+app.get(
+  "/api/admin/kyc/:id",
+  requireAdmin,
+  kycAccessLimiter,
+  async (req, res) => {
+    const id = req.params.id;
+
+    if (!/^[1-9]\d*$/.test(id)) {
+      return res.status(400).json({
+        success: false,
+        message: "Invalid KYC record ID."
+      });
+    }
+
+    const client = await pool.connect();
+
+    try {
+      await client.query("BEGIN");
+
+      const result = await client.query(
+        `SELECT
+           k.id,
+           k.customer_id,
+           k.loan_application_id,
+           k.bvn_encrypted,
+           k.bank_name_encrypted,
+           k.account_number_encrypted,
+           k.account_name_encrypted,
+           c.full_name
+         FROM customer_kyc k
+         JOIN customers c ON c.id = k.customer_id
+         WHERE k.id = $1
+         LIMIT 1`,
+        [id]
+      );
+
+      if (result.rows.length === 0) {
+        await client.query("ROLLBACK");
+
+        return res.status(404).json({
+          success: false,
+          message: "KYC record not found."
+        });
+      }
+
+      const kyc = result.rows[0];
+
+      await client.query(
+        `INSERT INTO admin_kyc_access_logs
+         (admin_username, customer_kyc_id, action)
+         VALUES ($1, $2, 'view_full')`,
+        [req.adminUsername, kyc.id]
+      );
+
+      await client.query("COMMIT");
+
+      return res.json({
+        success: true,
+        kyc: {
+          id: kyc.id,
+          customer_id: kyc.customer_id,
+          loan_application_id: kyc.loan_application_id,
+          full_name: kyc.full_name,
+          bvn: decryptCustomerData(kyc.bvn_encrypted),
+          bank_name: decryptCustomerData(kyc.bank_name_encrypted),
+          account_number: decryptCustomerData(kyc.account_number_encrypted),
+          account_name: decryptCustomerData(kyc.account_name_encrypted)
+        }
+      });
+
+    } catch (error) {
+      try {
+        await client.query("ROLLBACK");
+      } catch (_) {}
+
+      console.error("Admin KYC access error:", error.message);
+
+      return res.status(500).json({
+        success: false,
+        message: "Unable to retrieve KYC details."
+      });
+
+    } finally {
+      client.release();
+    }
+  }
+);
+
 // ADMINISTRATOR DASHBOARD APIs
 
 app.get("/api/admin/summary", requireAdmin, async (req, res) => {
