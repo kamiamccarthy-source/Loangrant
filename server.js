@@ -152,18 +152,7 @@ async function initializeDatabase() {
     )
   `);
 
-  await pool.query(`
-    CREATE TABLE IF NOT EXISTS admin_kyc_access_logs (
-      id BIGSERIAL PRIMARY KEY,
-      admin_username VARCHAR(120) NOT NULL,
-      customer_kyc_id BIGINT NOT NULL
-        REFERENCES customer_kyc(id),
-      action VARCHAR(30) NOT NULL,
-      accessed_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
-    )
-  `);
-}
-  
+
 
   await pool.query(`
     CREATE TABLE IF NOT EXISTS admin_kyc_access_logs (
