@@ -1054,7 +1054,44 @@ app.get(
 );
 
 // ADMINISTRATOR DASHBOARD APIs
+// ADMIN KYC RECORD LIST - NO SENSITIVE DETAILS
 
+app.get(
+  "/api/admin/kyc",
+  requireAdmin,
+  async (req, res) => {
+    try {
+      const result = await pool.query(`
+        SELECT
+          k.id,
+          k.customer_id,
+          k.loan_application_id,
+          c.full_name,
+          l.status AS application_status,
+          k.created_at
+        FROM customer_kyc k
+        JOIN customers c ON c.id = k.customer_id
+        LEFT JOIN loan_applications l
+          ON l.id = k.loan_application_id
+        ORDER BY k.created_at DESC
+        LIMIT 100
+      `);
+
+      res.json({
+        success: true,
+        records: result.rows
+      });
+
+    } catch (error) {
+      console.error("Admin KYC list error:", error.message);
+
+      res.status(500).json({
+        success: false,
+        message: "Unable to retrieve KYC records."
+      });
+    }
+  }
+);
 app.get("/api/admin/summary", requireAdmin, async (req, res) => {
   try {
     const result = await pool.query(`
