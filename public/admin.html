@@ -361,7 +361,7 @@ async function loadDashboard() {
 
     renderCustomers(customerData.customers || []);
     renderApplications(applicationData.applications || []);
-
+await loadKycRecords();
     message.className = "message success";
     message.textContent = "Dashboard updated successfully.";
   } catch (error) {
@@ -369,7 +369,41 @@ async function loadDashboard() {
     message.textContent = error.message;
   }
 }
+async function loadKycRecords() {
+  const body = document.getElementById("kycBody");
 
+  body.innerHTML = '<tr><td colspan="6">Loading KYC records...</td></tr>';
+
+  try {
+    const data = await apiRequest("/admin/kyc");
+    const records = data.records || [];
+
+    if (!records.length) {
+      body.innerHTML = '<tr><td colspan="6">No KYC records submitted yet.</td></tr>';
+      return;
+    }
+
+    body.innerHTML = records.map(record => `
+      <tr>
+        <td>${escapeHTML(record.id)}</td>
+        <td>${escapeHTML(record.full_name)}</td>
+        <td>${escapeHTML(record.loan_application_id)}</td>
+        <td>${escapeHTML(record.application_status || "Unavailable")}</td>
+        <td>${escapeHTML(formatDate(record.created_at))}</td>
+        <td>
+          <button onclick="viewKyc('${escapeHTML(record.id)}')">
+            View KYC
+          </button>
+        </td>
+      </tr>
+    `).join("");
+
+  } catch (error) {
+    body.innerHTML = `
+      <tr><td colspan="6">${escapeHTML(error.message)}</td></tr>
+    `;
+  }
+}
 function renderCustomers(customers) {
   const body = document.getElementById("customersBody");
 
