@@ -790,6 +790,142 @@ app.post("/api/loans/apply", requireAuth, authLimiter, async (req, res) => {
   }
 });
 
+// CUSTOMER KYC SUBMISSION
+
+app.post(
+  "/api/loans/:id/kyc",
+  requireAuth,
+  authLimiter,
+  async (req, res) => {
+    try {
+      const {
+        bvn,
+        bank_name,
+        account_number,
+        account_name,
+        consent_given
+      } = req.body;
+
+      const applicationId = req.params.id;
+
+      if (!/^[1-9]\d*$/.test(applicationId)) {
+        return res.status(400).json({
+          success: false,
+          message: "Invalid loan application ID."
+        });
+      }
+
+      if (
+        typeof bvn !== "string" ||
+        !/^\d{11}$/.test(bvn)
+      ) {
+        return res.status(400).json({
+          success: false,
+          message: "BVN must contain exactly 11 digits."
+        });
+      }
+
+      if (
+        typeof account_number !== "string" ||
+        !/^\d{10}$/.test(account_number)
+      ) {
+        return res.status(400).json({
+          success: false,
+          message: "Account number must contain exactly 10 digits."
+        });
+      }
+
+      if (
+        typeof bank_name !== "string" ||
+        bank_name.trim().length < 2 ||
+        bank_name.trim().length > 100
+      ) {
+        return res.status(400).json({
+          success: false,
+          message: "Enter a valid bank name."
+        });
+      }
+
+      if (
+        typeof account_name !== "string" ||
+        account_name.trim().length < 2 ||
+        account_name.trim().length > 120
+      ) {
+        return res.status(400).json({
+          success: false,
+          message: "Enter a valid account name."
+        });
+      }
+
+      if (consent_given !== true) {
+        return res.status(400).json({
+          success: false,
+          message: "You must provide consent before submitting KYC details."
+        });
+      }
+
+      const application = await pool.query(
+        `SELECT id
+         FROM loan_applications
+         WHERE id = $1
+           AND customer_id = $2
+           AND status = 'pending'`,
+        [applicationId, req.customerId]
+      );
+
+      if (application.rows.length === 0) {
+        return res.status(404).json({
+          success: false,
+          message: "Pending loan application not found."
+        });
+      }
+
+      const result = await pool.query(
+        `INSERT INTO customer_kyc (
+          customer_id,
+          loan_application_id,
+          bvn_encrypted,
+          bank_name_encrypted,
+          account_number_encrypted,
+          account_name_encrypted,
+          consent_given
+        )
+        VALUES ($1, $2, $3, $4, $5, $6, TRUE)
+        ON CONFLICT (loan_application_id) DO NOTHING
+        RETURNING id`,
+        [
+          req.customerId,
+          applicationId,
+          encryptCustomerData(bvn),
+          encryptCustomerData(bank_name.trim()),
+          encryptCustomerData(account_number),
+          encryptCustomerData(account_name.trim())
+        ]
+      );
+
+      if (result.rows.length === 0) {
+        return res.status(409).json({
+          success: false,
+          message: "KYC details have already been submitted for this application."
+        });
+      }
+
+      return res.status(201).json({
+        success: true,
+        message: "KYC details submitted securely."
+      });
+
+    } catch (error) {
+      console.error("KYC submission error:", error.message);
+
+      return res.status(500).json({
+        success: false,
+        message: "Unable to submit KYC details."
+      });
+    }
+  }
+);
+
 // VIEW CUSTOMER LOAN APPLICATIONS
 
 app.get("/api/loans/my-applications", requireAuth, async (req, res) => {
