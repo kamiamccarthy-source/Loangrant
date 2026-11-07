@@ -361,7 +361,63 @@ async function loadDashboard() {
 
     renderCustomers(customerData.customers || []);
     renderApplications(applicationData.applications || []);
-await loadKycRecords();
+await loadKycRecords();{
+  async function viewKyc(id) {
+  clearKycDetails();
+
+  if (!confirm(
+    "You are about to access sensitive customer identity and bank information. Continue only if required for legitimate loan processing."
+  )) {
+    return;
+  }
+
+  try {
+    const data = await apiRequest(
+      "/admin/kyc/" + encodeURIComponent(id)
+    );
+
+    const kyc = data.kyc;
+
+    document.getElementById("kycFullName").textContent =
+      kyc.full_name || "—";
+
+    document.getElementById("kycBvn").textContent =
+      kyc.bvn || "—";
+
+    document.getElementById("kycBank").textContent =
+      kyc.bank_name || "—";
+
+    document.getElementById("kycAccountNumber").textContent =
+      kyc.account_number || "—";
+
+    document.getElementById("kycAccountName").textContent =
+      kyc.account_name || "—";
+
+    document.getElementById("kycDetails").classList.remove("hidden");
+
+    document.getElementById("kycDetails").scrollIntoView({
+      behavior: "smooth",
+      block: "start"
+    });
+
+  } catch (error) {
+    alert(error.message);
+  }
+}
+
+function clearKycDetails() {
+  [
+    "kycFullName",
+    "kycBvn",
+    "kycBank",
+    "kycAccountNumber",
+    "kycAccountName"
+  ].forEach(id => {
+    document.getElementById(id).textContent = "";
+  });
+
+  document.getElementById("kycDetails").classList.add("hidden");
+}
     message.className = "message success";
     message.textContent = "Dashboard updated successfully.";
   } catch (error) {
