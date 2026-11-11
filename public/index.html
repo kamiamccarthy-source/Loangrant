@@ -553,12 +553,23 @@
         const status = document.createElement("span");
         status.className = "status";
         status.textContent = application.status;
+const kycStatus = document.createElement("p");
+kycStatus.className = "muted";
 
+const kycLabels = {
+  not_submitted: "Not submitted",
+  pending: "Pending review",
+  verified: "Verified",
+  rejected: "Rejected"
+};
+
+kycStatus.textContent =
+  "KYC status: " + (kycLabels[application.kyc_status] || "Not submitted");
         const date = document.createElement("p");
         date.className = "muted";
         date.textContent = "Submitted: " + new Date(application.created_at).toLocaleString();
 
-        item.append(heading, details, status, date);
+        item.append(heading, details, status, kycStatus, date);
 
         if (String(application.status).toLowerCase() === "pending") {
           const kycButton = document.createElement("button");
