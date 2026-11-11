@@ -956,11 +956,23 @@ app.post(
 app.get("/api/loans/my-applications", requireAuth, async (req, res) => {
   try {
     const result = await pool.query(
-      `SELECT id, amount, purpose, monthly_income,
-              repayment_months, status, created_at
-       FROM loan_applications
-       WHERE customer_id = $1
-       ORDER BY created_at DESC`,
+   
+`SELECT
+   l.id,
+   l.amount,
+   l.purpose,
+   l.monthly_income,
+   l.repayment_months,
+   l.status,
+   l.created_at,
+   COALESCE(k.review_status, 'not_submitted') AS kyc_status
+ FROM loan_applications l
+ LEFT JOIN customer_kyc k
+   ON k.loan_application_id = l.id
+   AND k.customer_id = l.customer_id
+ WHERE l.customer_id = $1
+ ORDER BY l.created_at DESC`,
+
       [req.customerId]
     );
 
