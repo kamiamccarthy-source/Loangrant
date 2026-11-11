@@ -452,6 +452,7 @@ async function viewKyc(id) {
     document.getElementById("kycAccountName").textContent = kyc.account_name || "—";
 
     document.getElementById("kycDetails").classList.remove("hidden");
+    startKycAutoHideTimer();
     document.getElementById("kycDetails").scrollIntoView({
       behavior: "smooth",
       block: "start"
@@ -462,7 +463,19 @@ async function viewKyc(id) {
   }
 }
 
+let kycAutoHideTimer = null;
+
+function startKycAutoHideTimer() {
+  clearTimeout(kycAutoHideTimer);
+
+  kycAutoHideTimer = setTimeout(() => {
+    clearKycDetails();
+    alert("KYC details were automatically hidden for security.");
+  }, 60000);
+}
+
 function clearKycDetails() {
+  clearTimeout(kycAutoHideTimer);
   [
     "kycFullName",
     "kycBvn",
