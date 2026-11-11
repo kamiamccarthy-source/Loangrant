@@ -959,7 +959,64 @@ footer p {
   <p>© 2026 LoanGrant. All rights reserved.</p>
   <p>Loan applications are subject to review and applicable requirements.</p>
 </footer>
+/* COMPACT MOBILE DASHBOARD SUMMARY CARDS */
 
+.summary-card {
+  display: grid;
+  grid-template-columns: 52px 1fr;
+  grid-template-rows: auto auto auto;
+  align-items: center;
+  column-gap: 14px;
+  row-gap: 4px;
+  padding: 19px;
+  min-height: 0;
+  height: auto;
+}
+
+.summary-icon {
+  grid-column: 1;
+  grid-row: 1 / 4;
+  margin: 0;
+  width: 48px;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.summary-card p {
+  grid-column: 2;
+  margin: 0;
+  font-size: 13px;
+}
+
+.summary-card h3 {
+  grid-column: 2;
+  margin: 0;
+  font-size: 27px;
+  line-height: 1.2;
+}
+
+.summary-card small {
+  grid-column: 2;
+  font-size: 11px;
+  margin: 0;
+}
+
+.summary-grid {
+  gap: 13px;
+}
+
+@media (max-width: 600px) {
+  .summary-card {
+    padding: 17px;
+  }
+
+  .summary-grid {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+}
 <script>
   const API = "/api";
   let customer = null;
