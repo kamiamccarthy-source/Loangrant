@@ -499,6 +499,232 @@ footer p {
 }
 
   </style>
+  
+/* LOANGRANT PROFESSIONAL CUSTOMER DASHBOARD */
+
+#dashboard {
+  max-width: 1120px;
+  margin: 0 auto;
+  padding: 38px;
+  background: #ffffff;
+  border: 1px solid #e8edf5;
+  border-radius: 20px;
+  box-shadow: 0 12px 40px rgba(18, 59, 130, 0.06);
+}
+
+.dashboard-heading {
+  padding-bottom: 25px;
+  border-bottom: 1px solid #edf0f5;
+  margin-bottom: 25px;
+}
+
+.dashboard-heading h2 {
+  font-size: 30px;
+  font-weight: 800;
+  letter-spacing: -1px;
+}
+
+.dashboard-heading #welcomeMessage {
+  font-size: 14px;
+}
+
+.dashboard-eyebrow {
+  font-size: 10px;
+  letter-spacing: 1.8px;
+  color: #3988d7;
+}
+
+.account-indicator {
+  background: #eaf8f0;
+  padding: 9px 15px;
+  font-size: 12px;
+}
+
+.summary-grid {
+  gap: 20px;
+  margin: 25px 0 35px;
+}
+
+.summary-card {
+  padding: 23px;
+  border-radius: 17px;
+  border: 1px solid #e8edf5;
+  box-shadow: 0 7px 22px rgba(18, 59, 130, 0.045);
+  transition: transform .2s, box-shadow .2s;
+}
+
+.summary-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 12px 25px rgba(18, 59, 130, 0.09);
+}
+
+.summary-icon {
+  width: 42px;
+  height: 42px;
+  align-items: center;
+  justify-content: center;
+  background: #edf4ff;
+  border-radius: 12px;
+  font-size: 19px;
+}
+
+.summary-card p {
+  font-size: 13px;
+  margin-top: 5px;
+}
+
+.summary-card h3 {
+  font-size: 32px;
+  font-weight: 800;
+  letter-spacing: -1px;
+  margin: 5px 0;
+}
+
+.dashboard-card {
+  background: #f7faff;
+  border: 1px solid #e5edf9;
+  border-radius: 16px;
+  padding: 23px;
+  margin: 25px 0 15px;
+}
+
+.dashboard-card h3 {
+  font-size: 20px;
+  margin-bottom: 7px;
+}
+
+#loanForm {
+  background: #ffffff;
+  border: 1px solid #e8edf5;
+  border-radius: 16px;
+  padding: 25px;
+  margin-top: 15px;
+}
+
+#loanForm label {
+  color: #263b5b;
+  font-size: 13px;
+}
+
+#loanForm input,
+#loanForm textarea,
+#loanForm select {
+  background: #fbfcff;
+  border-color: #dfe6f1;
+  border-radius: 11px;
+}
+
+#loanForm button[type="submit"] {
+  background: linear-gradient(110deg, #123b82, #1769bd);
+  border-radius: 11px;
+  padding: 16px;
+  font-size: 15px;
+}
+
+#applicationsList {
+  margin-top: 18px !important;
+}
+
+.application-item {
+  padding: 24px;
+  border-radius: 16px;
+  margin: 15px 0;
+  box-shadow: 0 5px 20px rgba(18, 59, 130, 0.045);
+}
+
+.application-item strong {
+  font-size: 26px;
+  letter-spacing: -.5px;
+}
+
+.application-item p {
+  font-size: 13px;
+  line-height: 1.7;
+}
+
+.status {
+  background: #fff4dc;
+  color: #895b08;
+  padding: 6px 13px;
+  border-radius: 8px;
+  font-size: 11px;
+  text-transform: capitalize;
+}
+
+.application-kyc-button {
+  background: #087443;
+  border-radius: 9px;
+}
+
+.kyc-panel {
+  background: #fbfdff;
+  border: 1px solid #dce6f5;
+  border-radius: 17px;
+  padding: 26px;
+  margin-top: 30px;
+}
+
+.kyc-panel h3 {
+  font-size: 21px;
+}
+
+#logoutButton {
+  border-radius: 10px;
+  padding: 13px 24px;
+}
+
+#dashboard hr {
+  border-color: #edf0f5 !important;
+}
+
+#dashboard > h3 {
+  color: #123b82 !important;
+  font-size: 21px;
+  margin-top: 30px;
+}
+
+#dashboard > button[onclick="loadApplications()"] {
+  background: #edf4ff;
+  color: #123b82;
+  border: 1px solid #dce8fa;
+}
+
+#dashboard > button[onclick="loadApplications()"]:hover {
+  background: #dceaff;
+}
+
+@media(max-width: 700px) {
+  #dashboard {
+    padding: 20px 15px;
+    border-radius: 14px;
+  }
+
+  .dashboard-heading h2 {
+    font-size: 25px;
+  }
+
+  .summary-grid {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+
+  .summary-card {
+    padding: 18px;
+  }
+
+  #loanForm {
+    padding: 18px;
+  }
+
+  .kyc-panel {
+    padding: 17px;
+  }
+
+  .application-item {
+    padding: 18px;
+  }
+}
+
 </head>
 <body>
 
