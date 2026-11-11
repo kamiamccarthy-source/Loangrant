@@ -395,39 +395,84 @@ async function loadDashboard() {
   }
 }
 
+
 async function loadKycRecords() {
   const body = document.getElementById("kycBody");
 
-  body.innerHTML = '<tr><td colspan="6">Loading KYC records...</td></tr>';
+  body.innerHTML = '<tr><td colspan="7">Loading KYC records...</td></tr>';
 
   try {
     const data = await apiRequest("/admin/kyc");
     const records = data.records || [];
 
     if (!records.length) {
-      body.innerHTML = '<tr><td colspan="6">No KYC records submitted yet.</td></tr>';
+      body.innerHTML = '<tr><td colspan="7">No KYC records submitted yet.</td></tr>';
       return;
     }
 
-    body.innerHTML = records.map(record => `
-      <tr>
-        <td>${escapeHTML(record.id)}</td>
-        <td>${escapeHTML(record.full_name)}</td>
-        <td>${escapeHTML(record.loan_application_id)}</td>
-        <td>${escapeHTML(record.application_status || "Unavailable")}</td>
-        <td>${escapeHTML(formatDate(record.created_at))}</td>
-        <td>
-          <button onclick="viewKyc('${escapeHTML(record.id)}')">
-            View KYC
+    body.innerHTML = records.map(record => {
+      const status = String(record.review_status || "pending").toLowerCase();
+
+      const reviewButtons = status === "pending"
+        ? `
+          <button onclick="reviewKyc('${escapeHTML(record.id)}','verified')">
+            Verify
           </button>
-        </td>
-      </tr>
-    `).join("");
+          <button class="reject"
+            onclick="reviewKyc('${escapeHTML(record.id)}','rejected')">
+            Reject
+          </button>
+        `
+        : "Review completed";
+
+      return `
+        <tr>
+          <td>${escapeHTML(record.id)}</td>
+          <td>${escapeHTML(record.full_name)}</td>
+          <td>${escapeHTML(record.loan_application_id)}</td>
+          <td>${escapeHTML(record.application_status || "Unavailable")}</td>
+          <td>${escapeHTML(formatDate(record.created_at))}</td>
+          <td>${escapeHTML(status)}</td>
+          <td>
+            <button onclick="viewKyc('${escapeHTML(record.id)}')">
+              View KYC
+            </button>
+            ${reviewButtons}
+          </td>
+        </tr>
+      `;
+    }).join("");
 
   } catch (error) {
     body.innerHTML = `
-      <tr><td colspan="6">${escapeHTML(error.message)}</td></tr>
+      <tr><td colspan="7">${escapeHTML(error.message)}</td></tr>
     `;
+  }
+}
+
+
+async function reviewKyc(id, status) {
+  const action = status === "verified" ? "verify" : "reject";
+
+  if (!confirm("Are you sure you want to " + action +
+      " this customer's KYC record?")) {
+    return;
+  }
+
+  try {
+    await apiRequest(
+      "/admin/kyc/" + encodeURIComponent(id) + "/review",
+      {
+        method: "PATCH",
+        body: JSON.stringify({ status })
+      }
+    );
+
+    alert("KYC review status updated successfully.");
+    await loadKycRecords();
+
+  } catch (error) {
+    alert(error.message);
   }
 }
 
