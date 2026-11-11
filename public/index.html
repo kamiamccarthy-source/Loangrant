@@ -772,12 +772,16 @@ footer p {
 
 @media (max-width: 600px) {
   .summary-card {
-    padding: 17px;
+    padding: 14px;
   }
 
   .summary-grid {
-    grid-template-columns: 1fr;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 12px;
+  }
+
+  .summary-card:first-child {
+    grid-column: 1 / -1;
   }
 }
   </style>
