@@ -488,9 +488,43 @@ footer p {
     </p>
   </div>
 
-  <div class="panel hidden" id="dashboard">
-    <h2 style="color:#174a9c">My Dashboard</h2>
-    <p id="welcomeMessage" style="margin-top:8px"></p>
+
+<div class="panel hidden" id="dashboard">
+
+    <div class="dashboard-heading">
+      <div>
+        <span class="dashboard-eyebrow">CUSTOMER OVERVIEW</span>
+        <h2>My Dashboard</h2>
+        <p id="welcomeMessage">Welcome to LoanGrant</p>
+      </div>
+      <div class="account-indicator">
+        <span class="online-dot"></span>
+        Account active
+      </div>
+    </div>
+
+    <div class="summary-grid">
+      <div class="summary-card">
+        <span class="summary-icon">📋</span>
+        <p>Total applications</p>
+        <h3 id="totalApplications">0</h3>
+        <small>Your submitted requests</small>
+      </div>
+
+      <div class="summary-card">
+        <span class="summary-icon">⏳</span>
+        <p>Pending applications</p>
+        <h3 id="pendingApplications">0</h3>
+        <small>Awaiting review</small>
+      </div>
+
+      <div class="summary-card">
+        <span class="summary-icon">🔐</span>
+        <p>KYC verified</p>
+        <h3 id="verifiedKyc">0</h3>
+        <small>Identity checks completed</small>
+      </div>
+    </div>
 
     <div class="dashboard-card">
       <h3>Submit a loan request</h3>
