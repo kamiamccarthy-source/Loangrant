@@ -1068,13 +1068,22 @@ footer p {
   }
 
   function showDashboard() {
-    document.getElementById("authPanel").classList.add("hidden");
-    document.getElementById("dashboard").classList.remove("hidden");
-    document.getElementById("welcomeMessage").textContent =
-      "Welcome, " + (customer?.full_name || "Customer");
-    document.getElementById("headerButton").textContent = "My dashboard";
-    loadApplications();
-  }
+  document.getElementById("authPanel").classList.add("hidden");
+  document.getElementById("dashboard").classList.remove("hidden");
+
+  document.getElementById("hero").classList.add("hidden");
+  document.getElementById("about").classList.add("hidden");
+
+  document.getElementById("portal").querySelector(".section-title").classList.add("hidden");
+  document.getElementById("portal").querySelector(".intro").classList.add("hidden");
+
+  document.getElementById("welcomeMessage").textContent =
+    "Welcome, " + (customer?.full_name || "Customer");
+
+  document.getElementById("headerButton").textContent = "My dashboard";
+
+  loadApplications();
+}
 
   function closeKycForm() {
     document.getElementById("kycPanel").classList.add("hidden");
