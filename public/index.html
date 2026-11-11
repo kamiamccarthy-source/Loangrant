@@ -942,13 +942,26 @@ footer p {
       });
 
       list.replaceChildren();
+const applications = data.applications || [];
 
-      if (!data.applications || data.applications.length === 0) {
+document.getElementById("totalApplications").textContent =
+  applications.length;
+
+document.getElementById("pendingApplications").textContent =
+  applications.filter(app =>
+    String(app.status).toLowerCase() === "pending"
+  ).length;
+
+document.getElementById("verifiedKyc").textContent =
+  applications.filter(app =>
+    String(app.kyc_status).toLowerCase() === "verified"
+  ).length;
+      if (applications.length === 0) {
         list.textContent = "You have not submitted any applications yet.";
         return;
       }
 
-      data.applications.forEach(application => {
+      applications.forEach(application => {
         const item = document.createElement("div");
         item.className = "application-item";
 
