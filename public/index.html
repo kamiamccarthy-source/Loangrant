@@ -7,152 +7,405 @@
   <title>LoanGrant | Customer Portal</title>
   <meta name="description" content="LoanGrant customer registration and loan application portal.">
   <style>
-    * { box-sizing: border-box; margin: 0; padding: 0; }
-    body {
-      font-family: Arial, sans-serif;
-      color: #17243b;
-      background: #f5f8ff;
-      line-height: 1.6;
-    }
-    header {
-      background: white;
-      padding: 16px 6%;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      box-shadow: 0 2px 12px #0000000b;
-    }
-    .logo { font-size: 25px; font-weight: 800; color: #174a9c; }
-    .logo span { color: #27a6ed; }
-    button, .primary-btn {
-      border: 0;
-      border-radius: 9px;
-      padding: 13px 19px;
-      background: #174a9c;
-      color: white;
-      font-weight: bold;
-      cursor: pointer;
-      font-size: 14px;
-    }
-    button:disabled { opacity: .6; cursor: wait; }
-    .hero {
-      padding: 65px 7%;
-      background: linear-gradient(125deg, #123b82, #1769bd);
-      color: white;
-    }
-    .hero-content { max-width: 760px; margin: auto; }
-    .tag {
-      display: inline-block;
-      background: #ffffff20;
-      border: 1px solid #ffffff40;
-      padding: 7px 14px;
-      border-radius: 30px;
-      font-size: 12px;
-      margin-bottom: 18px;
-    }
-    h1 { font-size: clamp(34px, 7vw, 52px); line-height: 1.15; margin-bottom: 18px; }
-    .hero p { color: #e4efff; max-width: 560px; margin-bottom: 24px; }
-    .hero button { background: white; color: #174a9c; }
-    .section { padding: 45px 6%; max-width: 1050px; margin: auto; }
-    .section-title { text-align: center; color: #173d79; margin-bottom: 12px; font-size: 27px; }
-    .intro { text-align: center; color: #64748b; margin-bottom: 25px; }
-    .panel {
-      background: white;
-      padding: 25px;
-      border-radius: 15px;
-      border: 1px solid #e5eaf3;
-      box-shadow: 0 5px 20px #173d790a;
-      max-width: 650px;
-      margin: auto;
-    }
-    .tabs { display: flex; gap: 10px; margin-bottom: 22px; }
-    .tabs button { flex: 1; background: #eaf1fc; color: #174a9c; }
-    .tabs button.active { background: #174a9c; color: white; }
-    label { display: block; font-size: 13px; font-weight: bold; margin: 13px 0 5px; }
-    input, textarea, select {
-      width: 100%;
-      padding: 13px;
-      border: 1px solid #d7e0ee;
-      border-radius: 8px;
-      font: inherit;
-      background: white;
-      color: #17243b;
-    }
-    textarea { min-height: 95px; resize: vertical; }
-    form button { width: 100%; margin-top: 18px; }
-    .message { margin-top: 13px; font-size: 14px; overflow-wrap: anywhere; }
-    .error { color: #b42318; }
-    .success { color: #087443; }
-    .muted { color: #64748b; font-size: 13px; }
-    .hidden { display: none !important; }
-    .dashboard-card {
-      background: #f5f8ff;
-      padding: 16px;
-      border-radius: 10px;
-      margin: 12px 0;
-    }
-    .application-item {
-      padding: 15px 0;
-      border-bottom: 1px solid #e5eaf3;
-    }
-    .kyc-panel {
-      margin-top: 20px;
-      padding: 18px;
-      border: 1px solid #d7e0ee;
-      border-radius: 10px;
-      background: #fbfdff;
-    }
-    .kyc-panel h3 { color: #174a9c; margin-bottom: 6px; }
-    .kyc-consent {
-      display: flex;
-      align-items: flex-start;
-      gap: 10px;
-      font-weight: normal;
-      line-height: 1.5;
-    }
-    .kyc-consent input {
-      width: auto;
-      margin-top: 5px;
-    }
-    .application-kyc-button {
-      margin-top: 10px;
-      background: #087443;
-    }
-    .status {
-      display: inline-block;
-      background: #fff2d8;
-      color: #895b08;
-      padding: 4px 10px;
-      border-radius: 20px;
-      font-size: 12px;
-      font-weight: bold;
-    }
-    .features {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-      gap: 15px;
-    }
-    .feature {
-      background: white;
-      border: 1px solid #e5eaf3;
-      border-radius: 12px;
-      padding: 22px;
-    }
-    .feature h3 { color: #174a9c; margin-bottom: 7px; }
-    .feature p { color: #64748b; font-size: 14px; }
-    footer {
-      background: #102c5d;
-      color: white;
-      text-align: center;
-      padding: 28px 15px;
-      font-size: 13px;
-    }
-    footer p { color: #d0ddf1; margin-top: 7px; }
-    @media(max-width: 500px) {
-      .hero { padding: 48px 6%; }
-      .section { padding: 35px 5%; }
-      .panel { padding: 19px; }
-    }
+ 
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+:root {
+  --navy: #123b82;
+  --blue: #1769bd;
+  --light-blue: #edf4ff;
+  --text: #17243b;
+  --muted: #718096;
+  --border: #e5eaf3;
+  --green: #087443;
+  --white: #ffffff;
+}
+
+body {
+  font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif;
+  background: #f5f7fc;
+  color: var(--text);
+  line-height: 1.6;
+}
+
+header {
+  background: rgba(255,255,255,.97);
+  min-height: 76px;
+  padding: 14px 6%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid var(--border);
+  position: sticky;
+  top: 0;
+  z-index: 20;
+}
+
+.logo {
+  font-size: 25px;
+  font-weight: 850;
+  letter-spacing: -.8px;
+  color: var(--navy);
+}
+
+.logo span {
+  color: #2996df;
+}
+
+button, .primary-btn {
+  border: 0;
+  border-radius: 10px;
+  padding: 12px 20px;
+  background: var(--navy);
+  color: white;
+  font-weight: 700;
+  cursor: pointer;
+  font-size: 14px;
+  transition: .2s ease;
+}
+
+button:hover {
+  background: #0c2d67;
+  transform: translateY(-1px);
+}
+
+button:disabled {
+  opacity: .6;
+  cursor: wait;
+  transform: none;
+}
+
+.hero {
+  padding: 75px 7%;
+  background:
+    radial-gradient(circle at 85% 20%, #ffffff20, transparent 30%),
+    linear-gradient(125deg, #123b82, #1769bd);
+  color: white;
+}
+
+.hero-content {
+  max-width: 1050px;
+  margin: auto;
+}
+
+.tag {
+  display: inline-block;
+  background: #ffffff18;
+  border: 1px solid #ffffff45;
+  padding: 7px 15px;
+  border-radius: 30px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  margin-bottom: 20px;
+}
+
+h1 {
+  font-size: clamp(34px, 6vw, 54px);
+  line-height: 1.15;
+  letter-spacing: -1.5px;
+  margin-bottom: 20px;
+  max-width: 750px;
+}
+
+.hero p {
+  color: #e4efff;
+  max-width: 580px;
+  margin-bottom: 27px;
+}
+
+.hero button {
+  background: white;
+  color: var(--navy);
+  padding: 14px 25px;
+}
+
+.section {
+  padding: 55px 6%;
+  max-width: 1150px;
+  margin: auto;
+}
+
+.section-title {
+  text-align: center;
+  color: var(--navy);
+  margin-bottom: 10px;
+  font-size: 29px;
+  letter-spacing: -.5px;
+}
+
+.intro {
+  text-align: center;
+  color: var(--muted);
+  margin-bottom: 30px;
+}
+
+.panel {
+  background: white;
+  padding: 30px;
+  border-radius: 18px;
+  border: 1px solid var(--border);
+  box-shadow: 0 8px 30px #193b7010;
+  max-width: 760px;
+  margin: auto;
+}
+
+#dashboard {
+  max-width: 100%;
+  padding: 30px;
+}
+
+#dashboard > h2 {
+  font-size: 27px;
+  letter-spacing: -.5px;
+}
+
+#dashboard > h3 {
+  margin-top: 25px;
+  font-size: 19px;
+}
+
+.tabs {
+  display: flex;
+  gap: 8px;
+  padding: 5px;
+  background: #f0f4fb;
+  border-radius: 12px;
+  margin-bottom: 25px;
+}
+
+.tabs button {
+  flex: 1;
+  background: transparent;
+  color: var(--muted);
+}
+
+.tabs button.active {
+  background: var(--navy);
+  color: white;
+  box-shadow: 0 3px 10px #123b8225;
+}
+
+label {
+  display: block;
+  font-size: 13px;
+  font-weight: 700;
+  margin: 16px 0 7px;
+  color: #34445d;
+}
+
+input, textarea, select {
+  width: 100%;
+  padding: 14px;
+  border: 1px solid #dce4f0;
+  border-radius: 10px;
+  font: inherit;
+  font-size: 14px;
+  background: white;
+  color: var(--text);
+  outline: none;
+  transition: border .2s, box-shadow .2s;
+}
+
+input:focus, textarea:focus, select:focus {
+  border-color: #3988d7;
+  box-shadow: 0 0 0 3px #3988d71c;
+}
+
+textarea {
+  min-height: 105px;
+  resize: vertical;
+}
+
+form button[type="submit"] {
+  width: 100%;
+  margin-top: 22px;
+  padding: 14px;
+}
+
+.message {
+  margin-top: 13px;
+  font-size: 14px;
+  overflow-wrap: anywhere;
+}
+
+.error { color: #b42318; }
+.success { color: var(--green); }
+
+.muted {
+  color: var(--muted);
+  font-size: 13px;
+}
+
+.hidden {
+  display: none !important;
+}
+
+.dashboard-card {
+  background: #f5f8ff;
+  padding: 20px;
+  border-radius: 13px;
+  margin: 15px 0;
+  border: 1px solid #e5edfa;
+}
+
+.dashboard-card h3,
+.dashboard-card h4 {
+  color: var(--navy);
+  margin-bottom: 8px;
+}
+
+.application-item {
+  background: white;
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 20px;
+  margin: 14px 0;
+  box-shadow: 0 4px 15px #193b7008;
+}
+
+.application-item strong {
+  display: block;
+  color: var(--navy);
+  font-size: 23px;
+  margin-bottom: 5px;
+}
+
+.application-item p {
+  margin: 7px 0;
+}
+
+.kyc-panel {
+  margin-top: 22px;
+  padding: 23px;
+  border: 1px solid #dce6f5;
+  border-radius: 15px;
+  background: #fbfdff;
+}
+
+.kyc-panel h3 {
+  color: var(--navy);
+  margin-bottom: 12px;
+}
+
+.kyc-consent {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  font-weight: normal;
+  line-height: 1.6;
+  margin-top: 18px;
+}
+
+.kyc-consent input {
+  width: auto;
+  margin-top: 5px;
+}
+
+.application-kyc-button {
+  margin-top: 12px;
+  background: var(--green);
+}
+
+.status {
+  display: inline-block;
+  background: #fff2d8;
+  color: #895b08;
+  padding: 5px 12px;
+  border-radius: 30px;
+  font-size: 12px;
+  font-weight: 750;
+  margin-top: 7px;
+}
+
+.features {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+  gap: 18px;
+}
+
+.feature {
+  background: white;
+  border: 1px solid var(--border);
+  border-radius: 15px;
+  padding: 25px;
+  box-shadow: 0 5px 20px #193b7008;
+}
+
+.feature h3 {
+  color: var(--navy);
+  margin-bottom: 9px;
+  font-size: 17px;
+}
+
+.feature p {
+  color: var(--muted);
+  font-size: 14px;
+}
+
+#logoutButton {
+  background: #64748b;
+}
+
+footer {
+  background: #102c5d;
+  color: white;
+  text-align: center;
+  padding: 35px 15px;
+  font-size: 13px;
+  margin-top: 40px;
+}
+
+footer p {
+  color: #d0ddf1;
+  margin-top: 7px;
+}
+
+@media(max-width: 600px) {
+  header {
+    padding: 13px 5%;
+    min-height: 68px;
+  }
+
+  .logo {
+    font-size: 22px;
+  }
+
+  header button {
+    padding: 10px 13px;
+    font-size: 12px;
+  }
+
+  .hero {
+    padding: 50px 6%;
+  }
+
+  .section {
+    padding: 35px 5%;
+  }
+
+  .panel {
+    padding: 20px;
+    border-radius: 14px;
+  }
+
+  #dashboard {
+    padding: 20px;
+  }
+
+  .section-title {
+    font-size: 25px;
+  }
+
+  .application-item {
+    padding: 16px;
+  }
+}
+
   </style>
 </head>
 <body>
