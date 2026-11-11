@@ -485,7 +485,7 @@
   document.getElementById("kycForm").addEventListener("submit", async function(event) {
     event.preventDefault();
 
-    if (!selectedKycApplicationId || !/^[1-9]\\d*$/.test(String(selectedKycApplicationId))) {
+    if (!selectedKycApplicationId || !/^[1-9]\d*$/.test(String(selectedKycApplicationId))) {
       showMessage("kycMessage", "Select a pending loan application first.", true);
       return;
     }
