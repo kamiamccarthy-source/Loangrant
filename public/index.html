@@ -364,7 +364,99 @@ footer p {
   color: #d0ddf1;
   margin-top: 7px;
 }
+.dashboard-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 25px;
+  flex-wrap: wrap;
+}
 
+.dashboard-heading h2 {
+  color: var(--navy);
+  font-size: 28px;
+  margin: 4px 0;
+}
+
+.dashboard-heading #welcomeMessage {
+  color: var(--muted);
+  margin-top: 4px;
+}
+
+.dashboard-eyebrow {
+  color: #3988d7;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 1.2px;
+}
+
+.account-indicator {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  background: #eef8f2;
+  color: #087443;
+  border-radius: 30px;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.online-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #16a36a;
+}
+
+.summary-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 14px;
+  margin: 20px 0 30px;
+}
+
+.summary-card {
+  background: #fff;
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 18px;
+  box-shadow: 0 4px 15px #193b7008;
+}
+
+.summary-icon {
+  display: inline-flex;
+  font-size: 20px;
+  margin-bottom: 10px;
+}
+
+.summary-card p {
+  color: var(--muted);
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.summary-card h3 {
+  color: var(--navy);
+  font-size: 28px;
+  margin: 3px 0;
+}
+
+.summary-card small {
+  color: var(--muted);
+  font-size: 11px;
+}
+
+@media(max-width: 600px) {
+  .summary-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .summary-card {
+    padding: 15px;
+  }
+}
 @media(max-width: 600px) {
   header {
     padding: 13px 5%;
