@@ -151,7 +151,23 @@ async function initializeDatabase() {
       UNIQUE (loan_application_id)
     )
   `);
+await pool.query(`
+  ALTER TABLE customer_kyc
+  ADD COLUMN IF NOT EXISTS review_status
+  TEXT NOT NULL DEFAULT 'pending'
+`);
 
+await pool.query(`
+  ALTER TABLE customer_kyc
+  ADD COLUMN IF NOT EXISTS review_note
+  TEXT
+`);
+
+await pool.query(`
+  ALTER TABLE customer_kyc
+  ADD COLUMN IF NOT EXISTS reviewed_at
+  TIMESTAMPTZ
+`);
 
 
   await pool.query(`
@@ -1068,7 +1084,10 @@ app.get(
           k.loan_application_id,
           c.full_name,
           l.status AS application_status,
-          k.created_at
+k.created_at,
+k.review_status,
+k.review_note,
+k.reviewed_at
         FROM customer_kyc k
         JOIN customers c ON c.id = k.customer_id
         LEFT JOIN loan_applications l
@@ -1092,6 +1111,74 @@ app.get(
     }
   }
 );
+
+app.patch(
+  "/api/admin/kyc/:id/review",
+  requireAdmin,
+  async (req, res) => {
+    try {
+      const id = String(req.params.id || "");
+      const { status, note } = req.body;
+
+      if (!/^[1-9]\d*$/.test(id)) {
+        return res.status(400).json({
+          success: false,
+          message: "Invalid KYC record ID."
+        });
+      }
+
+      if (!["verified", "rejected"].includes(status)) {
+        return res.status(400).json({
+          success: false,
+          message: "Choose verified or rejected."
+        });
+      }
+
+      if (
+        note !== undefined &&
+        (typeof note !== "string" || note.length > 500)
+      ) {
+        return res.status(400).json({
+          success: false,
+          message: "Review note must be 500 characters or fewer."
+        });
+      }
+
+      const result = await pool.query(
+        `UPDATE customer_kyc
+         SET review_status = $1,
+             review_note = $2,
+             reviewed_at = NOW(),
+             updated_at = NOW()
+         WHERE id = $3
+         RETURNING id, review_status, review_note, reviewed_at`,
+        [status, note?.trim() || null, id]
+      );
+
+      if (!result.rowCount) {
+        return res.status(404).json({
+          success: false,
+          message: "KYC record not found."
+        });
+      }
+
+      res.json({
+        success: true,
+        message: "KYC review status updated.",
+        record: result.rows[0]
+      });
+
+    } catch (error) {
+      console.error("KYC review error:", error.message);
+
+      res.status(500).json({
+        success: false,
+        message: "Unable to update KYC review status."
+      });
+    }
+  }
+);
+
 app.get("/api/admin/summary", requireAdmin, async (req, res) => {
   try {
     const result = await pool.query(`
