@@ -994,7 +994,12 @@ kycStatus.textContent =
 
         item.append(heading, details, status, kycStatus, date);
 
-        if (String(application.status).toLowerCase() === "pending") {
+        if (
+  String(application.status).toLowerCase() === "pending" &&
+  ["not_submitted", "rejected"].includes(
+    String(application.kyc_status || "not_submitted").toLowerCase()
+  )
+) {
           const kycButton = document.createElement("button");
           kycButton.type = "button";
           kycButton.className = "application-kyc-button";
