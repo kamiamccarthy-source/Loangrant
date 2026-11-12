@@ -17,28 +17,28 @@
 :root {
   --navy: #123b82;
   --blue: #1769bd;
-  --light-blue: #edf4ff;
   --text: #17243b;
   --muted: #718096;
   --border: #e5eaf3;
+  --surface: #f5f7fc;
   --green: #087443;
   --white: #ffffff;
 }
 
 body {
   font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif;
-  background: #f5f7fc;
+  background: var(--surface);
   color: var(--text);
   line-height: 1.6;
 }
 
 header {
-  background: rgba(255,255,255,.97);
   min-height: 76px;
   padding: 14px 6%;
   display: flex;
   align-items: center;
   justify-content: space-between;
+  background: #fff;
   border-bottom: 1px solid var(--border);
   position: sticky;
   top: 0;
@@ -56,34 +56,30 @@ header {
   color: #2996df;
 }
 
-button, .primary-btn {
+button {
   border: 0;
   border-radius: 10px;
   padding: 12px 20px;
   background: var(--navy);
   color: white;
+  font-size: 14px;
   font-weight: 700;
   cursor: pointer;
-  font-size: 14px;
   transition: .2s ease;
 }
 
 button:hover {
   background: #0c2d67;
-  transform: translateY(-1px);
 }
 
 button:disabled {
   opacity: .6;
   cursor: wait;
-  transform: none;
 }
 
 .hero {
-  padding: 75px 7%;
-  background:
-    radial-gradient(circle at 85% 20%, #ffffff20, transparent 30%),
-    linear-gradient(125deg, #123b82, #1769bd);
+  padding: 80px 7%;
+  background: linear-gradient(125deg, #102e68, #1769bd);
   color: white;
 }
 
@@ -94,10 +90,10 @@ button:disabled {
 
 .tag {
   display: inline-block;
-  background: #ffffff18;
-  border: 1px solid #ffffff45;
   padding: 7px 15px;
+  border: 1px solid #ffffff45;
   border-radius: 30px;
+  background: #ffffff18;
   font-size: 11px;
   font-weight: 700;
   letter-spacing: 1px;
@@ -105,16 +101,16 @@ button:disabled {
 }
 
 h1 {
+  max-width: 750px;
   font-size: clamp(34px, 6vw, 54px);
   line-height: 1.15;
   letter-spacing: -1.5px;
   margin-bottom: 20px;
-  max-width: 750px;
 }
 
 .hero p {
-  color: #e4efff;
   max-width: 580px;
+  color: #e4efff;
   margin-bottom: 27px;
 }
 
@@ -125,17 +121,16 @@ h1 {
 }
 
 .section {
-  padding: 55px 6%;
-  max-width: 1150px;
+  max-width: 1240px;
   margin: auto;
+  padding: 55px 6%;
 }
 
 .section-title {
   text-align: center;
   color: var(--navy);
-  margin-bottom: 10px;
   font-size: 29px;
-  letter-spacing: -.5px;
+  margin-bottom: 10px;
 }
 
 .intro {
@@ -145,37 +140,233 @@ h1 {
 }
 
 .panel {
-  background: white;
-  padding: 30px;
-  border-radius: 18px;
-  border: 1px solid var(--border);
-  box-shadow: 0 8px 30px #193b7010;
+  width: 100%;
   max-width: 760px;
   margin: auto;
+  padding: 30px;
+  background: white;
+  border: 1px solid var(--border);
+  border-radius: 18px;
+  box-shadow: 0 8px 30px #193b7010;
 }
 
 #dashboard {
-  max-width: 100%;
-  padding: 30px;
+  width: 100%;
+  max-width: 1120px;
+  margin: 20px auto;
+  padding: 36px;
+  background: white;
+  border: 1px solid var(--border);
+  border-radius: 22px;
+  box-shadow: 0 14px 45px rgba(18, 59, 130, .065);
 }
 
-#dashboard > h2 {
-  font-size: 27px;
-  letter-spacing: -.5px;
+.dashboard-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18px;
+  padding-bottom: 27px;
+  border-bottom: 1px solid #edf1f7;
 }
 
-#dashboard > h3 {
-  margin-top: 25px;
-  font-size: 19px;
+.dashboard-eyebrow {
+  display: block;
+  color: #3988d7;
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 1.7px;
+}
+
+.dashboard-heading h2 {
+  color: var(--navy);
+  font-size: 30px;
+  font-weight: 800;
+  letter-spacing: -1px;
+  margin: 5px 0;
+}
+
+.dashboard-heading #welcomeMessage {
+  color: var(--muted);
+  font-size: 14px;
+}
+
+.account-indicator {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 9px 14px;
+  border-radius: 30px;
+  background: #eaf8f0;
+  color: var(--green);
+  font-size: 12px;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.online-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #16a36a;
+}
+
+.summary-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 18px;
+  margin: 28px 0 35px;
+}
+
+.summary-card {
+  min-width: 0;
+  display: grid;
+  grid-template-columns: 48px minmax(0, 1fr);
+  grid-template-rows: auto auto auto;
+  align-items: center;
+  gap: 3px 13px;
+  padding: 23px;
+  background: white;
+  border: 1px solid var(--border);
+  border-radius: 17px;
+  box-shadow: 0 6px 22px rgba(18, 59, 130, .045);
+}
+
+.summary-icon {
+  grid-column: 1;
+  grid-row: 1 / 4;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 46px;
+  height: 46px;
+  margin: 0;
+  border-radius: 13px;
+  background: #edf4ff;
+  font-size: 20px;
+}
+
+.summary-card p {
+  grid-column: 2;
+  color: var(--muted);
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.summary-card h3 {
+  grid-column: 2;
+  color: var(--navy);
+  font-size: 30px;
+  font-weight: 800;
+  line-height: 1.3;
+}
+
+.summary-card small {
+  grid-column: 2;
+  color: #8794a8;
+  font-size: 11px;
+}
+
+.dashboard-card {
+  margin: 25px 0 16px;
+  padding: 25px;
+  background: #f5f8fe;
+  border: 1px solid #e4ecf8;
+  border-radius: 17px;
+}
+
+.dashboard-card h3,
+.dashboard-card h4 {
+  color: var(--navy);
+  margin-bottom: 7px;
+}
+
+.dashboard-card h3 {
+  font-size: 21px;
+}
+
+.muted {
+  color: var(--muted);
+  font-size: 13px;
+}
+
+label {
+  display: block;
+  margin: 17px 0 7px;
+  color: #34445d;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+input,
+textarea,
+select {
+  width: 100%;
+  padding: 14px 15px;
+  border: 1px solid #dce4f0;
+  border-radius: 11px;
+  background: #fbfcff;
+  color: var(--text);
+  font: inherit;
+  font-size: 14px;
+  outline: none;
+  transition: border .2s, box-shadow .2s;
+}
+
+input:focus,
+textarea:focus,
+select:focus {
+  border-color: #3988d7;
+  box-shadow: 0 0 0 3px #3988d71c;
+}
+
+textarea {
+  min-height: 110px;
+  resize: vertical;
+}
+
+#loanForm {
+  padding: 27px;
+  background: white;
+  border: 1px solid var(--border);
+  border-radius: 17px;
+}
+
+#loanForm button[type="submit"],
+#kycForm button[type="submit"] {
+  width: 100%;
+  margin-top: 23px;
+  padding: 15px;
+  border-radius: 11px;
+  background: linear-gradient(110deg, #123b82, #1769bd);
+  font-size: 15px;
+}
+
+.message {
+  margin-top: 13px;
+  font-size: 14px;
+  overflow-wrap: anywhere;
+}
+
+.error {
+  color: #b42318;
+}
+
+.success {
+  color: var(--green);
+}
+
+.hidden {
+  display: none !important;
 }
 
 .tabs {
   display: flex;
   gap: 8px;
   padding: 5px;
-  background: #f0f4fb;
-  border-radius: 12px;
   margin-bottom: 25px;
+  border-radius: 12px;
+  background: #f0f4fb;
 }
 
 .tabs button {
@@ -190,105 +381,84 @@ h1 {
   box-shadow: 0 3px 10px #123b8225;
 }
 
-label {
-  display: block;
-  font-size: 13px;
-  font-weight: 700;
-  margin: 16px 0 7px;
-  color: #34445d;
+.application-section-heading {
+  padding: 27px 0 12px;
+  margin-top: 30px;
+  border-top: 1px solid #edf1f7;
 }
 
-input, textarea, select {
-  width: 100%;
-  padding: 14px;
-  border: 1px solid #dce4f0;
-  border-radius: 10px;
-  font: inherit;
-  font-size: 14px;
-  background: white;
-  color: var(--text);
-  outline: none;
-  transition: border .2s, box-shadow .2s;
-}
-
-input:focus, textarea:focus, select:focus {
-  border-color: #3988d7;
-  box-shadow: 0 0 0 3px #3988d71c;
-}
-
-textarea {
-  min-height: 105px;
-  resize: vertical;
-}
-
-form button[type="submit"] {
-  width: 100%;
-  margin-top: 22px;
-  padding: 14px;
-}
-
-.message {
-  margin-top: 13px;
-  font-size: 14px;
-  overflow-wrap: anywhere;
-}
-
-.error { color: #b42318; }
-.success { color: var(--green); }
-
-.muted {
-  color: var(--muted);
-  font-size: 13px;
-}
-
-.hidden {
-  display: none !important;
-}
-
-.dashboard-card {
-  background: #f5f8ff;
-  padding: 20px;
-  border-radius: 13px;
-  margin: 15px 0;
-  border: 1px solid #e5edfa;
-}
-
-.dashboard-card h3,
-.dashboard-card h4 {
+.application-section-heading h3 {
+  margin: 5px 0;
   color: var(--navy);
-  margin-bottom: 8px;
+  font-size: 22px;
+  font-weight: 800;
+}
+
+.application-section-heading p {
+  margin-top: 3px;
+}
+
+#dashboard > button[onclick="loadApplications()"] {
+  margin-top: 12px;
+  background: #edf4ff;
+  color: var(--navy);
+  border: 1px solid #dce8fa;
+}
+
+#dashboard > button[onclick="loadApplications()"]:hover {
+  background: #dceaff;
+}
+
+#applicationsList {
+  margin-top: 18px !important;
 }
 
 .application-item {
+  margin: 15px 0;
+  padding: 24px;
   background: white;
   border: 1px solid var(--border);
-  border-radius: 14px;
-  padding: 20px;
-  margin: 14px 0;
-  box-shadow: 0 4px 15px #193b7008;
+  border-radius: 16px;
+  box-shadow: 0 5px 20px rgba(18, 59, 130, .045);
 }
 
 .application-item strong {
   display: block;
+  margin-bottom: 6px;
   color: var(--navy);
-  font-size: 23px;
-  margin-bottom: 5px;
+  font-size: 26px;
+  letter-spacing: -.5px;
 }
 
 .application-item p {
   margin: 7px 0;
+  font-size: 13px;
+  line-height: 1.7;
+}
+
+.status {
+  display: inline-block;
+  padding: 6px 13px;
+  margin-top: 7px;
+  border-radius: 30px;
+  background: #fff4dc;
+  color: #895b08;
+  font-size: 11px;
+  font-weight: 750;
+  text-transform: capitalize;
 }
 
 .kyc-panel {
-  margin-top: 22px;
-  padding: 23px;
-  border: 1px solid #dce6f5;
-  border-radius: 15px;
+  margin-top: 25px;
+  padding: 25px;
   background: #fbfdff;
+  border: 1px solid #dce6f5;
+  border-radius: 17px;
 }
 
 .kyc-panel h3 {
   color: var(--navy);
+  font-size: 21px;
   margin-bottom: 12px;
 }
 
@@ -296,9 +466,9 @@ form button[type="submit"] {
   display: flex;
   align-items: flex-start;
   gap: 10px;
+  margin-top: 18px;
   font-weight: normal;
   line-height: 1.6;
-  margin-top: 18px;
 }
 
 .kyc-consent input {
@@ -311,15 +481,21 @@ form button[type="submit"] {
   background: var(--green);
 }
 
-.status {
-  display: inline-block;
-  background: #fff2d8;
-  color: #895b08;
-  padding: 5px 12px;
-  border-radius: 30px;
-  font-size: 12px;
-  font-weight: 750;
-  margin-top: 7px;
+#kycCancelButton {
+  width: 100%;
+  margin-top: 10px;
+}
+
+#logoutButton {
+  margin-top: 25px;
+  padding: 13px 24px;
+  background: #64748b;
+}
+
+#dashboard hr {
+  border: 0;
+  border-top: 1px solid var(--border);
+  margin: 25px 0;
 }
 
 .features {
@@ -329,16 +505,16 @@ form button[type="submit"] {
 }
 
 .feature {
+  padding: 25px;
   background: white;
   border: 1px solid var(--border);
   border-radius: 15px;
-  padding: 25px;
   box-shadow: 0 5px 20px #193b7008;
 }
 
 .feature h3 {
-  color: var(--navy);
   margin-bottom: 9px;
+  color: var(--navy);
   font-size: 17px;
 }
 
@@ -347,120 +523,24 @@ form button[type="submit"] {
   font-size: 14px;
 }
 
-#logoutButton {
-  background: #64748b;
-}
-
 footer {
+  margin-top: 40px;
+  padding: 35px 15px;
   background: #102c5d;
   color: white;
   text-align: center;
-  padding: 35px 15px;
   font-size: 13px;
-  margin-top: 40px;
 }
 
 footer p {
-  color: #d0ddf1;
   margin-top: 7px;
-}
-.dashboard-heading {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 16px;
-  margin-bottom: 25px;
-  flex-wrap: wrap;
+  color: #d0ddf1;
 }
 
-.dashboard-heading h2 {
-  color: var(--navy);
-  font-size: 28px;
-  margin: 4px 0;
-}
-
-.dashboard-heading #welcomeMessage {
-  color: var(--muted);
-  margin-top: 4px;
-}
-
-.dashboard-eyebrow {
-  color: #3988d7;
-  font-size: 11px;
-  font-weight: 800;
-  letter-spacing: 1.2px;
-}
-
-.account-indicator {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  padding: 8px 12px;
-  background: #eef8f2;
-  color: #087443;
-  border-radius: 30px;
-  font-size: 12px;
-  font-weight: 700;
-}
-
-.online-dot {
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
-  background: #16a36a;
-}
-
-.summary-grid {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 14px;
-  margin: 20px 0 30px;
-}
-
-.summary-card {
-  background: #fff;
-  border: 1px solid var(--border);
-  border-radius: 14px;
-  padding: 18px;
-  box-shadow: 0 4px 15px #193b7008;
-}
-
-.summary-icon {
-  display: inline-flex;
-  font-size: 20px;
-  margin-bottom: 10px;
-}
-
-.summary-card p {
-  color: var(--muted);
-  font-size: 12px;
-  font-weight: 600;
-}
-
-.summary-card h3 {
-  color: var(--navy);
-  font-size: 28px;
-  margin: 3px 0;
-}
-
-.summary-card small {
-  color: var(--muted);
-  font-size: 11px;
-}
-
-@media(max-width: 600px) {
-  .summary-grid {
-    grid-template-columns: 1fr;
-  }
-
-  .summary-card {
-    padding: 15px;
-  }
-}
-@media(max-width: 600px) {
+@media (max-width: 700px) {
   header {
-    padding: 13px 5%;
     min-height: 68px;
+    padding: 13px 5%;
   }
 
   .logo {
@@ -482,422 +562,29 @@ footer p {
 
   .panel {
     padding: 20px;
-    border-radius: 14px;
-  }
-
-  #dashboard {
-    padding: 20px;
-  }
-
-  .section-title {
-    font-size: 25px;
-  }
-
-  .application-item {
-    padding: 16px;
-  }
-}
-  
-/* LOANGRANT PROFESSIONAL CUSTOMER DASHBOARD */
-
-#dashboard {
-  max-width: 1120px;
-  margin: 0 auto;
-  padding: 38px;
-  background: #ffffff;
-  border: 1px solid #e8edf5;
-  border-radius: 20px;
-  box-shadow: 0 12px 40px rgba(18, 59, 130, 0.06);
-}
-
-.dashboard-heading {
-  padding-bottom: 25px;
-  border-bottom: 1px solid #edf0f5;
-  margin-bottom: 25px;
-}
-
-.dashboard-heading h2 {
-  font-size: 30px;
-  font-weight: 800;
-  letter-spacing: -1px;
-}
-
-.dashboard-heading #welcomeMessage {
-  font-size: 14px;
-}
-
-.dashboard-eyebrow {
-  font-size: 10px;
-  letter-spacing: 1.8px;
-  color: #3988d7;
-}
-
-.account-indicator {
-  background: #eaf8f0;
-  padding: 9px 15px;
-  font-size: 12px;
-}
-
-.summary-grid {
-  gap: 20px;
-  margin: 25px 0 35px;
-}
-
-.summary-card {
-  padding: 23px;
-  border-radius: 17px;
-  border: 1px solid #e8edf5;
-  box-shadow: 0 7px 22px rgba(18, 59, 130, 0.045);
-  transition: transform .2s, box-shadow .2s;
-}
-
-.summary-card:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 12px 25px rgba(18, 59, 130, 0.09);
-}
-
-.summary-icon {
-  width: 42px;
-  height: 42px;
-  align-items: center;
-  justify-content: center;
-  background: #edf4ff;
-  border-radius: 12px;
-  font-size: 19px;
-}
-
-.summary-card p {
-  font-size: 13px;
-  margin-top: 5px;
-}
-
-.summary-card h3 {
-  font-size: 32px;
-  font-weight: 800;
-  letter-spacing: -1px;
-  margin: 5px 0;
-}
-
-.dashboard-card {
-  background: #f7faff;
-  border: 1px solid #e5edf9;
-  border-radius: 16px;
-  padding: 23px;
-  margin: 25px 0 15px;
-}
-
-.dashboard-card h3 {
-  font-size: 20px;
-  margin-bottom: 7px;
-}
-
-#loanForm {
-  background: #ffffff;
-  border: 1px solid #e8edf5;
-  border-radius: 16px;
-  padding: 25px;
-  margin-top: 15px;
-}
-
-#loanForm label {
-  color: #263b5b;
-  font-size: 13px;
-}
-
-#loanForm input,
-#loanForm textarea,
-#loanForm select {
-  background: #fbfcff;
-  border-color: #dfe6f1;
-  border-radius: 11px;
-}
-
-#loanForm button[type="submit"] {
-  background: linear-gradient(110deg, #123b82, #1769bd);
-  border-radius: 11px;
-  padding: 16px;
-  font-size: 15px;
-}
-
-#applicationsList {
-  margin-top: 18px !important;
-}
-
-.application-item {
-  padding: 24px;
-  border-radius: 16px;
-  margin: 15px 0;
-  box-shadow: 0 5px 20px rgba(18, 59, 130, 0.045);
-}
-
-.application-item strong {
-  font-size: 26px;
-  letter-spacing: -.5px;
-}
-
-.application-item p {
-  font-size: 13px;
-  line-height: 1.7;
-}
-
-.status {
-  background: #fff4dc;
-  color: #895b08;
-  padding: 6px 13px;
-  border-radius: 8px;
-  font-size: 11px;
-  text-transform: capitalize;
-}
-
-.application-kyc-button {
-  background: #087443;
-  border-radius: 9px;
-}
-
-.kyc-panel {
-  background: #fbfdff;
-  border: 1px solid #dce6f5;
-  border-radius: 17px;
-  padding: 26px;
-  margin-top: 30px;
-}
-
-.kyc-panel h3 {
-  font-size: 21px;
-}
-
-#logoutButton {
-  border-radius: 10px;
-  padding: 13px 24px;
-}
-
-#dashboard hr {
-  border-color: #edf0f5 !important;
-}
-
-#dashboard > h3 {
-  color: #123b82 !important;
-  font-size: 21px;
-  margin-top: 30px;
-}
-
-#dashboard > button[onclick="loadApplications()"] {
-  background: #edf4ff;
-  color: #123b82;
-  border: 1px solid #dce8fa;
-}
-
-#dashboard > button[onclick="loadApplications()"]:hover {
-  background: #dceaff;
-}
-
-@media(max-width: 700px) {
-  #dashboard {
-    padding: 20px 15px;
-    border-radius: 14px;
-  }
-
-  .dashboard-heading h2 {
-    font-size: 25px;
-  }
-
-  .summary-grid {
-    grid-template-columns: 1fr;
-    gap: 12px;
-  }
-
-  .summary-card {
-    padding: 18px;
-  }
-
-  #loanForm {
-    padding: 18px;
-  }
-
-  .kyc-panel {
-    padding: 17px;
-  }
-
-  .application-item {
-    padding: 18px;
-  }
-}
-
-/* LOANGRANT FINAL DASHBOARD DESIGN */
-
-#dashboard {
-  width: 100%;
-  max-width: 1120px;
-  margin: 25px auto;
-  padding: 34px;
-  background: #ffffff;
-  border: 1px solid #e7edf6;
-  border-radius: 20px;
-  box-shadow: 0 12px 35px rgba(18, 59, 130, 0.06);
-}
-
-.dashboard-heading {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 15px;
-  padding-bottom: 25px;
-  border-bottom: 1px solid #edf1f7;
-}
-
-.dashboard-heading h2 {
-  font-size: 30px;
-  font-weight: 800;
-  color: #123b82;
-  letter-spacing: -1px;
-}
-
-.dashboard-heading #welcomeMessage {
-  color: #718096;
-  font-size: 14px;
-}
-
-.summary-grid {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 18px;
-  margin: 28px 0 35px;
-}
-
-.summary-card {
-  display: grid;
-  grid-template-columns: 48px 1fr;
-  grid-template-rows: auto auto auto;
-  align-items: center;
-  gap: 3px 13px;
-  min-width: 0;
-  padding: 22px;
-  background: #ffffff;
-  border: 1px solid #e6edf6;
-  border-radius: 16px;
-  box-shadow: 0 5px 18px rgba(18, 59, 130, 0.045);
-}
-
-.summary-icon {
-  grid-column: 1;
-  grid-row: 1 / 4;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 46px;
-  height: 46px;
-  margin: 0;
-  border-radius: 13px;
-  background: #edf4ff;
-  font-size: 20px;
-}
-
-.summary-card p {
-  grid-column: 2;
-  margin: 0;
-  color: #718096;
-  font-size: 12px;
-}
-
-.summary-card h3 {
-  grid-column: 2;
-  margin: 0;
-  color: #123b82;
-  font-size: 29px;
-  font-weight: 800;
-}
-
-.summary-card small {
-  grid-column: 2;
-  color: #8794a8;
-  font-size: 11px;
-}
-
-#dashboard .dashboard-card {
-  padding: 24px;
-  margin: 25px 0 16px;
-  background: #f5f8fe;
-  border: 1px solid #e4ecf8;
-  border-radius: 16px;
-}
-
-#dashboard .dashboard-card h3 {
-  color: #123b82;
-  font-size: 20px;
-}
-
-#loanForm {
-  padding: 25px;
-  background: #ffffff;
-  border: 1px solid #e7edf6;
-  border-radius: 16px;
-}
-
-#loanForm button[type="submit"] {
-  background: linear-gradient(110deg, #123b82, #1769bd);
-  border-radius: 11px;
-  padding: 15px;
-}
-
-.application-item {
-  padding: 23px;
-  border-radius: 15px;
-  border: 1px solid #e5ebf4;
-  box-shadow: 0 5px 18px rgba(18, 59, 130, 0.04);
-}
-
-.application-item strong {
-  color: #123b82;
-  font-size: 25px;
-}
-
-.kyc-panel {
-  padding: 24px;
-  border-radius: 16px;
-  background: #fbfdff;
-}
-
-#logoutButton {
-  background: #64748b;
-}
-.application-section-heading {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 25px 0 12px;
-  border-top: 1px solid #edf1f7;
-  margin-top: 30px;
-}
-
-.application-section-heading h3 {
-  color: #123b82;
-  font-size: 21px;
-  font-weight: 800;
-  margin: 5px 0;
-}
-
-.application-section-heading p {
-  margin-top: 3px;
-}
-@media (max-width: 700px) {
-  #dashboard {
-    padding: 20px 15px;
-    margin: 15px auto;
     border-radius: 15px;
+  }
+
+  #dashboard {
+    margin: 12px auto;
+    padding: 22px 16px;
+    border-radius: 16px;
   }
 
   .dashboard-heading {
     align-items: flex-start;
     flex-direction: column;
+    gap: 13px;
   }
 
   .dashboard-heading h2 {
-    font-size: 25px;
+    font-size: 26px;
   }
 
   .summary-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 12px;
+    gap: 11px;
+    margin: 22px 0 27px;
   }
 
   .summary-card:first-child {
@@ -905,29 +592,50 @@ footer p {
   }
 
   .summary-card {
-    padding: 14px;
-    grid-template-columns: 40px 1fr;
+    grid-template-columns: 38px minmax(0, 1fr);
     column-gap: 9px;
+    padding: 15px 12px;
   }
 
   .summary-icon {
-    width: 38px;
-    height: 38px;
+    width: 36px;
+    height: 36px;
     font-size: 17px;
   }
 
   .summary-card h3 {
-    font-size: 24px;
+    font-size: 25px;
   }
 
+  .dashboard-card,
   #loanForm,
-  #dashboard .dashboard-card,
   .kyc-panel {
-    padding: 17px;
+    padding: 18px;
   }
 
   .application-item {
-    padding: 17px;
+    padding: 18px;
+  }
+
+  .application-item strong {
+    font-size: 23px;
+  }
+}
+
+@media (max-width: 360px) {
+  .summary-card {
+    grid-template-columns: 1fr;
+    gap: 5px;
+  }
+
+  .summary-icon {
+    grid-row: auto;
+  }
+
+  .summary-card p,
+  .summary-card h3,
+  .summary-card small {
+    grid-column: 1;
   }
 }
   </style>
