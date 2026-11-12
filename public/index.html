@@ -1532,7 +1532,7 @@ document.querySelectorAll(".sidebar-link").forEach(link => {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           full_name: document.getElementById("fullName").value.trim(),
-          phone: document.getElementById("registerPhone").value.trim(),
+          phone: normalizeNigerianPhone(document.getElementById("registerPhone").value),
           email: document.getElementById("registerEmail").value.trim(),
           password: document.getElementById("registerPassword").value
         })
