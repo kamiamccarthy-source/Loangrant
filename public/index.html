@@ -1451,7 +1451,32 @@ footer p {
 
   loadApplications();
 }
+function toggleDashboardMenu() {
+  const sidebar = document.querySelector(".dashboard-sidebar");
+  const overlay = document.getElementById("sidebarOverlay");
+  const toggle = document.getElementById("menuToggle");
 
+  const isOpen = sidebar.classList.toggle("menu-open");
+
+  overlay.classList.toggle("active", isOpen);
+  toggle.setAttribute("aria-expanded", String(isOpen));
+  document.body.style.overflow = isOpen ? "hidden" : "";
+}
+
+function closeDashboardMenu() {
+  const sidebar = document.querySelector(".dashboard-sidebar");
+  const overlay = document.getElementById("sidebarOverlay");
+  const toggle = document.getElementById("menuToggle");
+
+  sidebar.classList.remove("menu-open");
+  overlay.classList.remove("active");
+  toggle.setAttribute("aria-expanded", "false");
+  document.body.style.overflow = "";
+}
+
+document.querySelectorAll(".sidebar-link").forEach(link => {
+  link.addEventListener("click", closeDashboardMenu);
+});
   function closeKycForm() {
     document.getElementById("kycPanel").classList.add("hidden");
     document.getElementById("kycForm").reset();
