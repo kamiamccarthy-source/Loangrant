@@ -1557,7 +1557,7 @@ document.querySelectorAll(".sidebar-link").forEach(link => {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          phone: document.getElementById("loginPhone").value.trim(),
+          phone: normalizeNigerianPhone(document.getElementById("loginPhone").value),
           password: document.getElementById("loginPassword").value
         })
       });
