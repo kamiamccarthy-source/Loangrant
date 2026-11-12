@@ -724,154 +724,205 @@ footer p {
 
 <div class="panel hidden" id="dashboard">
 
-    <div class="dashboard-heading">
-      <div>
-        <span class="dashboard-eyebrow">CUSTOMER OVERVIEW</span>
-        <h2>My Dashboard</h2>
-        <p id="welcomeMessage">Welcome to LoanGrant</p>
+  <div class="dashboard-layout">
+
+    <!-- DASHBOARD SIDEBAR -->
+    <aside class="dashboard-sidebar">
+      <div class="sidebar-brand">Loan<span>Grant</span></div>
+
+      <p class="sidebar-label">MAIN MENU</p>
+
+      <a href="#overview" class="sidebar-link active">▦ Overview</a>
+      <a href="#loanSection" class="sidebar-link">＋ Apply for a loan</a>
+      <a href="#historySection" class="sidebar-link">▤ My applications</a>
+      <a href="#kycPanel" class="sidebar-link">◇ Identity verification</a>
+
+      <div class="sidebar-bottom">
+        <div class="sidebar-security">🔒 Secure customer portal</div>
+        <button type="button" id="logoutButton" onclick="logout()">Log out</button>
       </div>
-      <div class="account-indicator">
-        <span class="online-dot"></span>
-        Account active
-      </div>
-    </div>
+    </aside>
 
-    <div class="summary-grid">
-      <div class="summary-card">
-        <span class="summary-icon">📋</span>
-        <p>Total applications</p>
-        <h3 id="totalApplications">0</h3>
-        <small>Your submitted requests</small>
-      </div>
+    <!-- MAIN DASHBOARD CONTENT -->
+    <main class="dashboard-main">
 
-      <div class="summary-card">
-        <span class="summary-icon">⏳</span>
-        <p>Pending applications</p>
-        <h3 id="pendingApplications">0</h3>
-        <small>Awaiting review</small>
+      <div class="dashboard-topbar">
+        <div>
+          <span class="dashboard-eyebrow">CUSTOMER PORTAL</span>
+          <h2>Dashboard overview</h2>
+          <p id="welcomeMessage">Welcome to LoanGrant</p>
+        </div>
+
+        <div class="account-indicator">
+          <span class="online-dot"></span>
+          Account active
+        </div>
       </div>
 
-      <div class="summary-card">
-        <span class="summary-icon">🔐</span>
-        <p>KYC verified</p>
-        <h3 id="verifiedKyc">0</h3>
-        <small>Identity checks completed</small>
-      </div>
-    </div>
+      <!-- OVERVIEW -->
+      <section id="overview" class="dashboard-section">
+        <div class="section-heading">
+          <div>
+            <h3>Your account overview</h3>
+            <p>Keep track of your loan applications and verification.</p>
+          </div>
+        </div>
 
-    <div class="dashboard-card">
-      <h3>Submit a loan request</h3>
-      <p class="muted">All requests are subject to review. Submission does not guarantee approval or payment.</p>
-    </div>
+        <div class="summary-grid">
 
-    <form id="loanForm">
-      <label for="loanAmount">Requested amount (₦)</label>
-      <input id="loanAmount" type="number" min="1000" max="5000000" step="100" required>
+          <div class="summary-card total-card">
+            <div class="summary-icon">▤</div>
+            <p>Total applications</p>
+            <h3 id="totalApplications">0</h3>
+            <small>All submitted requests</small>
+          </div>
 
-      <label for="loanPurpose">Purpose of loan</label>
-      <textarea id="loanPurpose" minlength="10" maxlength="1000" required placeholder="Explain why you need the loan"></textarea>
+          <div class="summary-card pending-card">
+            <div class="summary-icon">◷</div>
+            <p>Pending applications</p>
+            <h3 id="pendingApplications">0</h3>
+            <small>Awaiting review</small>
+          </div>
 
-      <label for="monthlyIncome">Monthly income (₦)</label>
-      <input id="monthlyIncome" type="number" min="1" max="100000000" step="0.01" required>
+          <div class="summary-card verified-card">
+            <div class="summary-icon">✓</div>
+            <p>KYC verified</p>
+            <h3 id="verifiedKyc">0</h3>
+            <small>Completed identity checks</small>
+          </div>
 
-      <label for="repaymentMonths">Requested repayment period</label>
-      <select id="repaymentMonths" required>
-        <option value="">Choose period</option>
-        <option value="1">1 month</option>
-        <option value="3">3 months</option>
-        <option value="6">6 months</option>
-        <option value="9">9 months</option>
-        <option value="12">12 months</option>
-        <option value="18">18 months</option>
-        <option value="24">24 months</option>
-        <option value="36">36 months</option>
-      </select>
+        </div>
+      </section>
 
-      <button type="submit">Submit loan request</button>
-      <p id="loanMessage" class="message" role="status"></p>
-    </form>
+      <!-- LOAN APPLICATION -->
+      <section id="loanSection" class="dashboard-section">
+        <div class="section-heading">
+          <div>
+            <span class="dashboard-eyebrow">LOAN SERVICES</span>
+            <h3>Apply for a loan</h3>
+            <p>Provide the requested details to submit your application.</p>
+          </div>
+        </div>
 
-    <div id="kycPanel" class="kyc-panel hidden">
-      <h3>Submit KYC details</h3>
-     <div class="dashboard-card">
-  <h4>Important KYC Privacy Notice</h4>
+        <div class="dashboard-card">
+          <h4>Before you apply</h4>
+          <p>Enter accurate information. Every application is subject to review. Submitting a request does not guarantee approval or payment.</p>
+        </div>
 
-  <p class="muted">
-    LoanGrant requests identity and bank information only for
-    identity verification and processing your loan application.
-  </p>
+        <form id="loanForm" class="loan-form">
 
-  <p class="muted">
-    Your information will be stored using encryption and access
-    will be restricted to authorised personnel who need it for
-    legitimate verification and application review.
-  </p>
+          <div class="form-grid">
+            <div class="form-field">
+              <label for="loanAmount">Requested amount (₦)</label>
+              <input id="loanAmount" type="number" min="1000" max="5000000" step="100" required>
+            </div>
 
-  <p class="muted">
-    Your information will not be sold. It may only be shared
-    with authorised verification providers or lawful authorities
-    where necessary and legally permitted.
-  </p>
+            <div class="form-field">
+              <label for="monthlyIncome">Monthly income (₦)</label>
+              <input id="monthlyIncome" type="number" min="1" max="100000000" step="0.01" required>
+            </div>
+          </div>
 
-  <p class="muted">
-    Information will be retained only for as long as necessary
-    for the stated purposes and applicable legal obligations.
-  </p>
+          <div class="form-field">
+            <label for="loanPurpose">Purpose of loan</label>
+            <textarea id="loanPurpose" minlength="10" maxlength="1000" required placeholder="Explain why you need the loan"></textarea>
+          </div>
 
-  <p class="muted">
-    You may contact LoanGrant to ask about your personal data,
-    request access or correction, or raise a privacy complaint.
-  </p>
+          <div class="form-field">
+            <label for="repaymentMonths">Requested repayment period</label>
+            <select id="repaymentMonths" required>
+              <option value="">Choose repayment period</option>
+              <option value="1">1 month</option>
+              <option value="3">3 months</option>
+              <option value="6">6 months</option>
+              <option value="9">9 months</option>
+              <option value="12">12 months</option>
+              <option value="18">18 months</option>
+              <option value="24">24 months</option>
+              <option value="36">36 months</option>
+            </select>
+          </div>
 
-  <p class="muted">
-    Do not submit your details unless you have read and understood
-    this notice.
-  </p>
-</div>
+          <button type="submit" class="primary-action">Submit loan application</button>
+          <p id="loanMessage" class="message" role="status"></p>
 
-      <form id="kycForm">
-        <label for="kycBvn">BVN (11 digits)</label>
-        <input id="kycBvn" type="text" inputmode="numeric" autocomplete="off"
-          minlength="11" maxlength="11" pattern="[0-9]{11}" required>
+        </form>
+      </section>
 
-        <label for="kycBankName">Bank name</label>
-        <input id="kycBankName" type="text" minlength="2" maxlength="100"
-          autocomplete="off" required>
+      <!-- KYC -->
+      <section id="kycPanel" class="kyc-panel hidden">
+        <span class="dashboard-eyebrow">IDENTITY VERIFICATION</span>
+        <h3>Submit KYC details</h3>
+        <p class="muted">Complete the required identity and bank information for verification.</p>
 
-        <label for="kycAccountNumber">Bank account number (10 digits)</label>
-        <input id="kycAccountNumber" type="text" inputmode="numeric" autocomplete="off"
-          minlength="10" maxlength="10" pattern="[0-9]{10}" required>
+        <div class="dashboard-card">
+          <h4>Important KYC Privacy Notice</h4>
+          <p class="muted">LoanGrant requests identity and bank information only for identity verification and processing your loan application.</p>
+          <p class="muted">Your information will be stored using encryption and access will be restricted to authorised personnel who need it for legitimate verification and application review.</p>
+          <p class="muted">Your information will not be sold. It may only be shared with authorised verification providers or lawful authorities where necessary and legally permitted.</p>
+          <p class="muted">Information will be retained only for as long as necessary for the stated purposes and applicable legal obligations.</p>
+          <p class="muted">You may contact LoanGrant to ask about your personal data, request access or correction, or raise a privacy complaint.</p>
+          <p class="muted">Do not submit your details unless you have read and understood this notice.</p>
+        </div>
 
-        <label for="kycAccountName">Account name</label>
-        <input id="kycAccountName" type="text" minlength="2" maxlength="120"
-          autocomplete="off" required>
+        <form id="kycForm">
 
-        <label class="kyc-consent">
-          <input id="kycConsent" type="checkbox" required>
-          <span>I consent to LoanGrant processing these details for the stated loan application and related verification.</span>
-        </label>
+          <div class="form-field">
+            <label for="kycBvn">BVN (11 digits)</label>
+            <input id="kycBvn" type="text" inputmode="numeric" autocomplete="off" minlength="11" maxlength="11" pattern="[0-9]{11}" required>
+          </div>
 
-        <button id="kycSubmitButton" type="submit">Submit KYC securely</button>
-        <button type="button" id="kycCancelButton" style="background:#64748b"
-          onclick="closeKycForm()">Cancel</button>
-        <p id="kycMessage" class="message" role="status"></p>
-      </form>
-    </div>
+          <div class="form-field">
+            <label for="kycBankName">Bank name</label>
+            <input id="kycBankName" type="text" minlength="2" maxlength="100" autocomplete="off" required>
+          </div>
 
-    <hr style="border:0;border-top:1px solid #e5eaf3;margin:25px 0">
+          <div class="form-field">
+            <label for="kycAccountNumber">Bank account number (10 digits)</label>
+            <input id="kycAccountNumber" type="text" inputmode="numeric" autocomplete="off" minlength="10" maxlength="10" pattern="[0-9]{10}" required>
+          </div>
 
-   <div class="application-section-heading">
-  <div>
-    <span class="dashboard-eyebrow">LOAN ACTIVITY</span>
-    <h3>Application history</h3>
-    <p class="muted">Track the progress of your loan requests.</p>
+          <div class="form-field">
+            <label for="kycAccountName">Account name</label>
+            <input id="kycAccountName" type="text" minlength="2" maxlength="120" autocomplete="off" required>
+          </div>
+
+          <label class="kyc-consent">
+            <input id="kycConsent" type="checkbox" required>
+            <span>I consent to LoanGrant processing these details for the stated loan application and related verification.</span>
+          </label>
+
+          <button id="kycSubmitButton" type="submit" class="primary-action">Submit KYC securely</button>
+          <button type="button" id="kycCancelButton" class="secondary-action" onclick="closeKycForm()">Cancel</button>
+          <p id="kycMessage" class="message" role="status"></p>
+
+        </form>
+      </section>
+
+      <!-- APPLICATION HISTORY -->
+      <section id="historySection" class="dashboard-section">
+        <div class="section-heading history-heading">
+          <div>
+            <span class="dashboard-eyebrow">LOAN ACTIVITY</span>
+            <h3>Application history</h3>
+            <p>Track the progress of your loan requests.</p>
+          </div>
+
+          <button type="button" onclick="loadApplications()" class="refresh-button">↻ Refresh</button>
+        </div>
+
+        <div id="applicationsList"></div>
+      </section>
+
+      <footer class="dashboard-footer">
+        <strong>LoanGrant</strong>
+        <p>Simple. Secure. Transparent.</p>
+        <small>© 2026 LoanGrant. All rights reserved.</small>
+      </footer>
+
+    </main>
   </div>
 </div>
-    <button type="button" onclick="loadApplications()" style="margin-top:12px">Refresh applications</button>
-    <div id="applicationsList" style="margin-top:15px"></div>
-
-    <button type="button" id="logoutButton" style="background:#64748b;margin-top:25px" onclick="logout()">Log out</button>
-  </div>
 </section>
 
 <footer>
