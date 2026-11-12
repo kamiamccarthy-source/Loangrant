@@ -1093,16 +1093,24 @@ footer p {
   }
 
   function logout() {
-    closeKycForm();
-    sessionStorage.removeItem("loangrant_token");
-    customer = null;
-    document.getElementById("dashboard").classList.add("hidden");
-    document.getElementById("authPanel").classList.remove("hidden");
-    document.getElementById("headerButton").textContent = "Customer portal";
-    showAuth("login");
-    openPortal();
-  }
+  closeKycForm();
+  sessionStorage.removeItem("loangrant_token");
+  customer = null;
 
+  document.getElementById("dashboard").classList.add("hidden");
+  document.getElementById("authPanel").classList.remove("hidden");
+
+  document.getElementById("hero").classList.remove("hidden");
+  document.getElementById("about").classList.remove("hidden");
+
+  document.getElementById("portal").querySelector(".section-title").classList.remove("hidden");
+  document.getElementById("portal").querySelector(".intro").classList.remove("hidden");
+
+  document.getElementById("headerButton").textContent = "Customer portal";
+
+  showAuth("login");
+  openPortal();
+}
   async function apiRequest(url, options = {}) {
     const response = await fetch(API + url, options);
     const data = await response.json().catch(() => ({}));
